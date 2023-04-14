@@ -3,6 +3,7 @@ import { RmqService } from './rmq.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 
+
 interface RmqModuleOptions {
     name: string;
 }
@@ -12,21 +13,21 @@ interface RmqModuleOptions {
     exports: [RmqService]
 })
 export class RmqModule {
-    static register({ name }: RmqModuleOptions): DynamicModule {
+    static register({ name }: RmqModuleOptions, configS): DynamicModule {
         return {
             module: RmqModule,
             imports: [
                 ClientsModule.registerAsync([
                     {
                         name,
-                        useFactory: (configService: ConfigService) => ({
+                        useFactory: (configS: any) => ({
                             transport: Transport.RMQ,
                             options: {
-                                urls: [configService.get<string>('RMQ_URI')],
-                                queue: configService.get<string>(`RMQ_${name}_QUEUE`),
+                                urls: [configS.getRmqUri],
+                                queue: configS.getRmqUsersQueue,
                             },
                         }),
-                        inject: [ConfigService],
+                        inject: [configS],
                     },
                 ]),
             ],

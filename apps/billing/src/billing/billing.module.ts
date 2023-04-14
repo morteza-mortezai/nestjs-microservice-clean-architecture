@@ -11,7 +11,7 @@ import { BillingService } from './billing.service';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({ RMQ_URI: Joi.string().required(), RMQ_BILLING_QUEUE: Joi.string().required() }),
-      envFilePath: './apps/billing/.env'
+      envFilePath: 'apps/billing/env/local.env'
     })
   ],
   controllers: [BillingController],

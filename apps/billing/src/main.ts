@@ -1,9 +1,11 @@
 import { RmqService } from '@app/common';
 import { NestFactory } from '@nestjs/core';
-import { BillingModule } from './billing.module';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(BillingModule);
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
   const rmqService = app.get<RmqService>(RmqService)
   app.connectMicroservice(rmqService.getOptions('BILLING'))
 
