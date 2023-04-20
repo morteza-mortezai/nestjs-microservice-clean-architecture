@@ -1,7 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, } from '@nestjs/common';
 import { BillingService } from './billing.service';
-import { EventPattern, Payload, RmqContext, Ctx } from '@nestjs/microservices'
+import { MessagePattern, Payload, RmqContext, Ctx } from '@nestjs/microservices'
 import { RmqService } from '@app/common'
+import { RMQ_EVENTS } from '../constants/rmq.constants';
+import { Observable, from } from 'rxjs';
 @Controller()
 export class BillingController {
   constructor(
@@ -9,13 +11,14 @@ export class BillingController {
     private readonly rmqService: RmqService
   ) { }
 
-  @Get()
+  @Get('u')
   getHello(): string {
     return this.billingService.getHello();
   }
-  @EventPattern('order_created')
-  order(@Payload() data: any, @Ctx() context: RmqContext) {
+  @MessagePattern('GET_USER_BY_ID')
+  order(@Payload() data: number[], @Ctx() context: RmqContext): Observable<number> {
     this.billingService.order(data);
-    this.rmqService.ack(context)
+    // this.rmqService.ack(context)
+    return from(data);
   }
 }

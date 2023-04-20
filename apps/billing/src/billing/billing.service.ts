@@ -3,10 +3,11 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class BillingService {
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello World!!!!!!';
   }
 
   order(data) {
-    return console.log('bill is cretaed ', data)
+    console.log('bill is cretaed ', data)
+    return 'hi'
   }
 }

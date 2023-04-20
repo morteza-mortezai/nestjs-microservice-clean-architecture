@@ -11,12 +11,13 @@ export class RmqService {
     ) { }
 
     getOptions(queue: string, noAck = false): RmqOptions {
+        console.log('rec', this.configService.get<string>(`RMQ_${queue}_QUEUE`))
         return {
             transport: Transport.RMQ,
             options: {
                 urls: [this.configService.get<string>('RMQ_URI')],
                 queue: this.configService.get<string>(`RMQ_${queue}_QUEUE`),
-                noAck,
+                // noAck,
                 persistent: true
             }
         }

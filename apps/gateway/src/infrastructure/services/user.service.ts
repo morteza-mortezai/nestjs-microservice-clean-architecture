@@ -7,16 +7,16 @@ import { RMQ_EVENTS } from '../constants/rmq.constants'
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(RMQ_SERVICE.USERS) private usersClient: ClientProxy
+    @Inject('BILLING') private usersClient: ClientProxy
   ) { }
 
   getHello(): string {
     return 'Hello World!';
   }
 
-  async getUserById(id: number) {
+  async getUserById(id: string) {
     try {
-      const v = await lastValueFrom(this.usersClient.emit(RMQ_EVENTS.GET_USER_BY_ID, id))
+      const v = await lastValueFrom(this.usersClient.send('GET_USER_BY_ID', id))
       console.log('v**', v)
     } catch (error) {
       console.log('error in order service', error)
