@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { RMQ_SERVICE } from '../constants/rmq.constants';
 import { CreateUserDto } from '../dto/createUser.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs'
-import { RMQ_EVENTS } from '../constants/rmq.constants'
+import { RMQ_MESSAGES, RMQ_SERVICES } from '../constants/rmq.constants'
+
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('BILLING') private usersClient: ClientProxy
+    @Inject(RMQ_SERVICES.BILLING) private usersClient: ClientProxy
   ) { }
 
   getHello(): string {
@@ -16,7 +16,7 @@ export class UserService {
 
   async getUserById(id: string) {
     try {
-      const v = await lastValueFrom(this.usersClient.send('GET_USER_BY_ID', id))
+      const v = await lastValueFrom(this.usersClient.send(RMQ_MESSAGES.GET_USER_BY_ID, id))
       console.log('v**', v)
     } catch (error) {
       console.log('error in order service', error)
@@ -25,7 +25,7 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      await lastValueFrom(this.usersClient.emit(RMQ_EVENTS.NEW_USER_CREATED, createUserDto))
+      await lastValueFrom(this.usersClient.emit(RMQ_MESSAGES.NEW_USER_CREATED, createUserDto))
     } catch (error) {
       console.log('error in order service', error)
     }
