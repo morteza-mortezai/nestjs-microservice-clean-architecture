@@ -13,7 +13,6 @@ import { EnvironmentService } from '../environment/environment.service';
             provide: RMQ_SERVICES.BILLING,
             useFactory: (environmentService: EnvironmentService) => {
                 const rabbitMQOptions = environmentService.getRabbitMQOptions(RMQ_SERVICES.BILLING);
-                console.log('op', rabbitMQOptions)
                 return ClientProxyFactory.create(rabbitMQOptions);
             },
             inject: [EnvironmentService],

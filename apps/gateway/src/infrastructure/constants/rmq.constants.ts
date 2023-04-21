@@ -3,6 +3,6 @@ export enum RMQ_SERVICES {
     BILLING = 'BILLING'
 }
 export enum RMQ_MESSAGES {
-    NEW_USER_CREATED,
+    CREATE_NEW_USER,
     GET_USER_BY_ID
 }

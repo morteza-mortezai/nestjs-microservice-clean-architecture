@@ -6,4 +6,6 @@ export const validationSchema = Joi.object({
     APP_PORT: Joi.number().default(3001),
     RMQ_URI: Joi.string().required(),
     RMQ_BILLING_QUEUE: Joi.string().required(),
+    HTTP_TIMEOUT: Joi.number().required(),
+    HTTP_MAX_REDIRECTS: Joi.number().required(),
 })

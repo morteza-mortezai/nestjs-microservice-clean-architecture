@@ -5,7 +5,8 @@ import { validationSchema } from './environment.validate'
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+
+      isGlobal: true, // حذف شود و تست شود
       validationSchema,
       envFilePath: './apps/gateway/env/local.env'
     })
