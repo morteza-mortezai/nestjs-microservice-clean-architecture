@@ -1,4 +1,3 @@
 export interface RmqConfig {
-    getRmqUri(): string;
-    getRmqUsersQueue(): string;
+    getRabbitMQOptions(name: string, noAck: boolean): any;
 }

@@ -1,8 +1,7 @@
 export enum RMQ_SERVICES {
     USERS = 'USERS',
-    BILLING = 'BILLING'
 }
 export enum RMQ_MESSAGES {
-    NEW_USER_CREATED,
-    GET_USER_BY_ID
-}
+    CREATE_NEW_USER = 'CREATE_NEW_USER',
+    GET_USER_BY_ID = 'GET_USER_BY_ID'
+} 

@@ -1,23 +1,31 @@
 import { Injectable } from '@nestjs/common'
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
-import { EnvironmentService } from '../environment/environment.service';
+import { EnvironmentService } from '../../environment/environment.service';
+import { join } from 'path';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     constructor(
-        private environment: EnvironmentService
+        private environmentService: EnvironmentService
     ) { }
     createTypeOrmOptions(): TypeOrmModuleOptions {
         return {
-            type: 'postgres',
-            host: this.environment.getDatabaseHost(),
-            port: this.environment.getDatabasePort(),
-            username: this.environment.getDatabaseUser(),
-            password: this.environment.getDatabasePassword(),
-            database: this.environment.getDatabaseName(),
-            // entities: [User],
+            type: 'mongodb',
+            url: this.environmentService.getMongoDbUri(),
+            entities: [join(__dirname, '**/**.entity{.ts,.js}')],
             autoLoadEntities: true,
-            synchronize: this.environment.getDatabaseSynchronize(),
+            synchronize: true,
+            useNewUrlParser: true,
         };
     }
 }
+
+// TypeOrmModule.forRoot({
+//     type: 'mongodb',
+//     url:
+//         'mongodb+srv://<admin>:<password>@chnirt-graphql-apollo-vg0hq.mongodb.net/nest?retryWrites=true&w=majority',
+//     entities: [join(__dirname, '**/**.entity{.ts,.js}')],
+//     synchronize: true,
+//     useNewUrlParser: true,
+//     logging: true,
+// }),

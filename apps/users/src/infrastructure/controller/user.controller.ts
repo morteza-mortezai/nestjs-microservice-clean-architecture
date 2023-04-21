@@ -1,28 +1,43 @@
 import { Controller, Post, Body, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { MessagePattern, Payload, RmqContext, Ctx } from '@nestjs/microservices'
 import { CreateUserDto } from '../dto/createUser.dto';
-import { diModule } from '../di/di.module';
-import { DiProxy } from '../di/di'
+import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
+import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
 import { addUserUsecase } from '../../usecase/addUser.usecase'
+import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { RMQ_MESSAGES } from '../constants/rmq.constants';
 
-@Controller('users')
+@Controller()
 export class UserController {
     constructor(
-        @Inject(diModule.POST_USER_USECASES_PROXY)
-        private readonly postUserUsecaseDi: DiProxy<addUserUsecase>
+        @Inject(UsecaseProxyModule.POST_USER_USECASES_PROXY)
+        private readonly postUserUsecase: UsecaseProxy<addUserUsecase>,
+        @Inject(UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY)
+        private readonly getUserUsecaseProxy: UsecaseProxy<GetUserFromApiUsecase>,
     ) { }
 
     @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
-    async createUser(@Payload() createUser: CreateUserDto, @Ctx() context: RmqContext) {
+    async createUser(@Payload() id: number, @Ctx() context: RmqContext) {
 
         // try {
-        const createdUser = await this.postUserUsecaseDi.getInstance().addUser(createUser as any)
-        return createdUser
+        const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(id)
+        return user
 
         // } catch (error) {
         // console.log('ee', error)
         // throw error
         // }
     }
+    // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
+    // async createUser1(@Payload() createUser: CreateUserDto, @Ctx() context: RmqContext) {
+
+    //     // try {
+    //     // const createdUser = await this.postUserUsecase.getInstance().addUser(createUser as any)
+    //     // return createdUser
+
+    //     // } catch (error) {
+    //     // console.log('ee', error)
+    //     // throw error
+    //     // }
+    // }
 }

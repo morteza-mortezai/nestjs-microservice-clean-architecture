@@ -8,16 +8,16 @@ import { EnvironmentService } from '../environment/environment.service';
     imports: [EnvironmentModule],
     controllers: [],
     providers: [
-        //billing service
+        //users service
         {
-            provide: RMQ_SERVICES.BILLING,
+            provide: RMQ_SERVICES.USERS,
             useFactory: (environmentService: EnvironmentService) => {
-                const rabbitMQOptions = environmentService.getRabbitMQOptions(RMQ_SERVICES.BILLING);
+                const rabbitMQOptions = environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS);
                 return ClientProxyFactory.create(rabbitMQOptions);
             },
             inject: [EnvironmentService],
         }
     ],
-    exports: [RMQ_SERVICES.BILLING]
+    exports: [RMQ_SERVICES.USERS]
 })
 export class RabbitmqModule { }

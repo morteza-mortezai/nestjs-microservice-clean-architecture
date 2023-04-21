@@ -1,9 +1,11 @@
+// import { IException } from "./exception.interface";
+
 export interface IFormatExceptionMessage {
   message: string;
   code_error?: number;
 }
 
-export interface IException {
+export interface IExceptionService {
   badRequestException(data: IFormatExceptionMessage): void;
   internalServerErrorException(data?: IFormatExceptionMessage): void;
   forbiddenException(data?: IFormatExceptionMessage): void;

@@ -7,20 +7,21 @@ import { RMQ_MESSAGES, RMQ_SERVICES } from '../constants/rmq.constants'
 @Injectable()
 export class UsersService {
   constructor(
-    @Inject(RMQ_SERVICES.BILLING) private usersClient: ClientProxy
+    @Inject(RMQ_SERVICES.USERS) private usersClient: ClientProxy
   ) { }
 
   getHello(): string {
     return 'Hello World!';
   }
-
+  // TODO : time out gerefte shavad
   async getUserById(id: number) {
     try {
-      const v = await lastValueFrom(this.usersClient.send(RMQ_MESSAGES.GET_USER_BY_ID, id).pipe(timeout(5000)))
+      const v = await lastValueFrom(this.usersClient.send(RMQ_MESSAGES.GET_USER_BY_ID, id).pipe(timeout(15000)))
       // this.usersClient.send(RMQ_MESSAGES.GET_USER_BY_ID, id).pipe(timeout(5000))
       console.log('v**', v)
+      return v
     } catch (error) {
-      console.log('error in order service', error)
+      console.log('error in gateway', error)
     }
   }
 

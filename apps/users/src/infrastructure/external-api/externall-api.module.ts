@@ -2,6 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { EnvironmentModule } from '../environment/environment.module';
 import { EnvironmentService } from '../environment/environment.service';
+import { ExternallApiService } from './externall-api.service';
 
 @Module({
     imports: [
@@ -15,7 +16,7 @@ import { EnvironmentService } from '../environment/environment.service';
         })
     ],
     controllers: [],
-    providers: [],
-    exports: []
+    providers: [ExternallApiService],
+    exports: [ExternallApiService]
 })
 export class ExternallApiModule { }

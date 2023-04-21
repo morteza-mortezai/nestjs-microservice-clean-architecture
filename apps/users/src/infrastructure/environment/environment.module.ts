@@ -7,7 +7,7 @@ import { validationSchema } from './environment.validate'
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'apps/billing/env/local.env',
+      envFilePath: 'apps/users/env/local.env',
       validationSchema,
 
     })

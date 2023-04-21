@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { RmqConfig } from '../../domain/environment/rmq.interface';
 import { AppConfig } from '../../domain/environment/app.interface';
 import { HttpConfig } from '../../domain/environment/http.interface';
+import { ClientOptions, Transport } from '@nestjs/microservices';
 
 @Injectable()
 export class EnvironmentService implements RmqConfig, AppConfig, HttpConfig {
@@ -11,12 +12,12 @@ export class EnvironmentService implements RmqConfig, AppConfig, HttpConfig {
     //     console.log(`----`, this.configService.get<string>('DB_HOST'));
     // }
 
-    getRmqUri(): string {
-        return this.configService.get<string>('DB_HOST');
+    private _getRmqUri(): string {
+        return this.configService.get<string>('RMQ_URI');
     }
 
-    getRmqUsersQueue(): string {
-        return this.configService.get<string>('DB_USERNAME');
+    private _getQueue(name: string): string {
+        return this.configService.get<string>(`RMQ_${name}_QUEUE`);
     }
 
     getAppPort(): number {
@@ -29,6 +30,23 @@ export class EnvironmentService implements RmqConfig, AppConfig, HttpConfig {
 
     getHttpMaxRedirects(): number {
         return this.configService.get<number>('HTTP_MAX_REDIRECTS');
+    }
+
+    getMongoDbUri(): string {
+        return this.configService.get<string>('MONGODB_URI');
+    }
+
+    getRabbitMQOptions(name: string, noAck = false): ClientOptions {
+        const clientOptions: ClientOptions = {
+            transport: Transport.RMQ,
+            options: {
+                urls: [this._getRmqUri()],
+                queue: this._getQueue(name),
+                persistent: true,
+                noAck
+            }
+        }
+        return clientOptions
     }
 
 }

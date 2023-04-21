@@ -19,13 +19,13 @@
         "tsConfigPath": "apps/gateway/tsconfig.app.json"
       }
     },
-    "billing": {
+    "users": {
       "type": "application",
-      "root": "apps/billing",
+      "root": "apps/users",
       "entryFile": "main",
-      "sourceRoot": "apps/billing/src",
+      "sourceRoot": "apps/users/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/billing/tsconfig.app.json"
+        "tsConfigPath": "apps/users/tsconfig.app.json"
       }
     },
     "auth": {
