@@ -2,7 +2,7 @@ import { Controller, Get, Param, ParseIntPipe, Post, Body, Delete } from '@nestj
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/createUser.dto';
 
-@Controller('api')
+@Controller()
 export class UserController {
   constructor(private readonly usersService: UsersService) { }
 
