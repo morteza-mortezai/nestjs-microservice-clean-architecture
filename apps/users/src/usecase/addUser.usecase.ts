@@ -12,7 +12,7 @@ export class addUserUsecase {
         const exist = await this.userRepository.findByEmail(newUser.email)
         console.log('exist', exist)
         // if (exist) throw new Error('this email is registered already !')
-        if (exist) throw this.exceptionService.badRequestException({ message: 'exist', code_error: 400 })
+        if (exist) throw this.exceptionService.badRequestException({ message: 'exist' })
         const createdUser = await this.userRepository.insert(newUser)
         return createdUser
     }

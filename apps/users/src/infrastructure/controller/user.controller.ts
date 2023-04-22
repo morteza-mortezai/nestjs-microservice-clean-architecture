@@ -7,7 +7,7 @@ import { addUserUsecase } from '../../usecase/addUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { RMQ_MESSAGES } from '../constants/rmq.constants';
 
-@Controller('api')
+@Controller()
 export class UserController {
     constructor(
         @Inject(UsecaseProxyModule.POST_USER_USECASES_PROXY)
