@@ -5,4 +5,4 @@ export class UserM {
     last_name: string
     password: string
     avatar: string
-}
+} 

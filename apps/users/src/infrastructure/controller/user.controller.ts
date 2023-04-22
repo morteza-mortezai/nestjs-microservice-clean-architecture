@@ -18,7 +18,7 @@ export class UserController {
 
     @Get('user/:id')
     // async createUser(@Payload() id: number, @Ctx() context: RmqContext) {
-    async createUser(@Param('id', ParseIntPipe) id: number) {
+    async getUserById(@Param('id', ParseIntPipe) id: number) {
         // return 'hello000'
         // try {
         const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(id)
@@ -30,15 +30,15 @@ export class UserController {
         // }
     }
     // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
-    // async createUser1(@Payload() createUser: CreateUserDto, @Ctx() context: RmqContext) {
+    @Post('users')
+    async createUser1(@Payload() createUser: CreateUserDto) {
+        // try {
+        const createdUser = await this.postUserUsecase.getInstance().addUser(createUser as any)
+        return createdUser
 
-    //     // try {
-    //     // const createdUser = await this.postUserUsecase.getInstance().addUser(createUser as any)
-    //     // return createdUser
-
-    //     // } catch (error) {
-    //     // console.log('ee', error)
-    //     // throw error
-    //     // }
-    // }
+        // } catch (error) {
+        //     console.log('ee', error)
+        //     throw error
+        // }
+    }
 }

@@ -1,7 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { UserRepositoryModule } from '../repository/userRepository.module';
 import { addUserUsecase } from '../../usecase/addUser.usecase'
-// import { DatabaseUserRepository } from 'src/infrastructure/repository/user.repository'
+import { DatabaseUserRepository } from '../../infrastructure/repository/user.repository'
 import { UsecaseProxy } from './usecase-proxy'
 import { ExceptionsService } from '../exceptions/exceptions.service';
 import { ExceptionsModule } from '../exceptions/exceptions.module';
@@ -15,16 +15,16 @@ import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 })
 export class UsecaseProxyModule {
     static POST_USER_USECASES_PROXY = 'postUserUsecasesProxy';
-    static Get_USER_FROM_API_USECASES_PROXY = 'postUserUsecasesProxy';
+    static Get_USER_FROM_API_USECASES_PROXY = 'getUserFromExternallApiUsecasesProxy';
     static register(): DynamicModule {
         return {
             module: UsecaseProxyModule,
             providers: [
-                // {
-                //     inject: [DatabaseUserRepository, ExceptionsService],
-                //     provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
-                //     useFactory: (databaseUserRepository: DatabaseUserRepository, exceptionsService: ExceptionsService) => new UsecaseProxy(new addUserUsecase(databaseUserRepository, exceptionsService))
-                // },
+                {
+                    inject: [DatabaseUserRepository, ExceptionsService],
+                    provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
+                    useFactory: (databaseUserRepository: DatabaseUserRepository, exceptionsService: ExceptionsService) => new UsecaseProxy(new addUserUsecase(databaseUserRepository, exceptionsService))
+                },
                 {
                     inject: [ExternallApiService, ExceptionsService],
                     provide: UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY,
@@ -32,7 +32,7 @@ export class UsecaseProxyModule {
                 }
             ],
             exports: [
-                UsecaseProxyModule.POST_USER_USECASES_PROXY
+                UsecaseProxyModule.POST_USER_USECASES_PROXY, UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY
             ]
         }
     }

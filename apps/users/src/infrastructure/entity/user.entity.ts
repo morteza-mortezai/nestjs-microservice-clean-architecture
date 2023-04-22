@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ObjectIdColumn, ObjectId } from 'typeorm';
 
 @Entity()
 export class User {
@@ -8,14 +8,24 @@ export class User {
     })
     id: number;
 
+    @ObjectIdColumn()
+    _id: ObjectId
+
     @Column({
         nullable: false,
         default: '',
     })
-    username: string;
+    first_name: string;
+
+    @Column({
+        nullable: false,
+        default: '',
+    })
+    last_name: string;
 
     @Column({
         name: 'email_address',
+        unique: true,
         nullable: false,
         default: '',
     })
@@ -25,7 +35,7 @@ export class User {
         nullable: false,
         default: '',
     })
-    password: string;
+    avatar: string;
 }
 
 // import { EntitySchema } from 'typeorm';
