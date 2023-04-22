@@ -39,6 +39,7 @@ export class ExternallApiService {
             return data;
         } catch (error) {
             // console.log('api service', error)
+            throw error
         }
     }
 
