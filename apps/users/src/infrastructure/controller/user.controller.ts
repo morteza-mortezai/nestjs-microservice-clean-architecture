@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Inject, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Body, Inject, HttpException, HttpStatus, ParseIntPipe, Param } from '@nestjs/common';
 import { MessagePattern, Payload, RmqContext, Ctx } from '@nestjs/microservices'
 import { CreateUserDto } from '../dto/createUser.dto';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
@@ -7,7 +7,7 @@ import { addUserUsecase } from '../../usecase/addUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { RMQ_MESSAGES } from '../constants/rmq.constants';
 
-@Controller()
+@Controller('api')
 export class UserController {
     constructor(
         @Inject(UsecaseProxyModule.POST_USER_USECASES_PROXY)
@@ -16,9 +16,10 @@ export class UserController {
         private readonly getUserUsecaseProxy: UsecaseProxy<GetUserFromApiUsecase>,
     ) { }
 
-    @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
-    async createUser(@Payload() id: number, @Ctx() context: RmqContext) {
-
+    @Get('user/:id')
+    // async createUser(@Payload() id: number, @Ctx() context: RmqContext) {
+    async createUser(@Param('id', ParseIntPipe) id: number) {
+        // return 'hello000'
         // try {
         const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(id)
         return user
