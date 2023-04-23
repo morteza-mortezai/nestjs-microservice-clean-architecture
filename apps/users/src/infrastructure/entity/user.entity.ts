@@ -2,11 +2,6 @@ import { Column, Entity, PrimaryGeneratedColumn, ObjectIdColumn, ObjectId } from
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn({
-        type: 'bigint',
-        name: 'user_id',
-    })
-    id: number;
 
     @ObjectIdColumn()
     _id: ObjectId
