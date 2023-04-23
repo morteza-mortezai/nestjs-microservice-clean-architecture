@@ -28,7 +28,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       .json(responseData);
   }
 }
-
+// TODO :
+// مشکل فعلی اینه که اکسپشن های MONGO , TYPOORM  را نمی تواند بگیرد
+// حتی میشه ارو های اکسیوس هم اینحا هندل کرد
 
 // import { ArgumentsHost, Catch, ExceptionFilter, HttpException, BadRequestException, HttpStatus, Logger } from '@nestjs/common';
 // import { Request, Response } from 'express';
