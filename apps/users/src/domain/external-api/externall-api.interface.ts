@@ -1,5 +1,5 @@
 import { UserM } from "../model/user";
 
-export interface UserExternallApi {
+export interface IExternallApiService {
     getUserById(id: number): Promise<UserM>
 }

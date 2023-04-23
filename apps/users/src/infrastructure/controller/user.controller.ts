@@ -5,6 +5,7 @@ import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
 import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
 import { addUserUsecase } from '../../usecase/addUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
+import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { RMQ_MESSAGES } from '../constants/rmq.constants';
 
 @Controller()
@@ -14,24 +15,12 @@ export class UserController {
         private readonly postUserUsecase: UsecaseProxy<addUserUsecase>,
         @Inject(UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY)
         private readonly getUserUsecaseProxy: UsecaseProxy<GetUserFromApiUsecase>,
+        @Inject(UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY)
+        private readonly getAvatarUsecaseProxy: UsecaseProxy<GetUserAvatarUsecase>,
     ) { }
-
-    @Get('user/:id')
-    // async createUser(@Payload() id: number, @Ctx() context: RmqContext) {
-    async getUserById(@Param('id', ParseIntPipe) id: number) {
-        // return 'hello000'
-        // try {
-        const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(id)
-        return user
-
-        // } catch (error) {
-        // console.log('ee', error)
-        // throw error
-        // }
-    }
     // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
     @Post('users')
-    async createUser1(@Payload() createUser: CreateUserDto) {
+    async createUser(@Payload() createUser: CreateUserDto) {
         try {
             const createdUser = await this.postUserUsecase.getInstance().addUser(createUser as any)
             return createdUser
@@ -41,4 +30,33 @@ export class UserController {
             return error
         }
     }
+
+    @Get('user/:userId')
+    // async createUser(@Payload() userId: number, @Ctx() context: RmqContext) {
+    async getUserById(@Param('userId', ParseIntPipe) userId: number) {
+        // return 'hello000'
+        // try {
+        const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(userId)
+        return user
+
+        // } catch (error) {
+        // console.log('ee', error)
+        // throw error
+        // }
+    }
+
+    @Get('user/:userId/avatar')
+    // async createUser(@Payload() userId: number, @Ctx() context: RmqContext) {
+    async getAvatarByUserId(@Param('userId', ParseIntPipe) userId: number) {
+        // return 'hello000'
+        // try {
+        const user = await this.getAvatarUsecaseProxy.getInstance().getAvatar(userId)
+        return user
+
+        // } catch (error) {
+        // console.log('ee', error)
+        // throw error
+        // }
+    }
+
 }

@@ -4,8 +4,10 @@ import { AxiosError } from 'axios'
 import { ExceptionsService } from "../exceptions/exceptions.service";
 import { UserM } from "../../domain/model/user";
 import { HttpService } from "@nestjs/axios";
+import { IExternallApiService } from "../../domain/external-api/externall-api.interface";
+
 @Injectable()
-export class ExternallApiService {
+export class ExternallApiService implements IExternallApiService {
     constructor(
         private readonly httpService: HttpService,
         private readonly exceptionService: ExceptionsService,
@@ -49,5 +51,7 @@ export class ExternallApiService {
         //     }
         // }
     }
-
+    async getAvatarByUrl(url: string): Promise<any> {
+        return this.httpService.get(url)
+    }
 }

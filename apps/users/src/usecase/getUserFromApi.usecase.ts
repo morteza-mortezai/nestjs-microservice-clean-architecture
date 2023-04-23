@@ -7,11 +7,11 @@ export class GetUserFromApiUsecase {
         private readonly exceptionService: IExceptionService
     ) { }
 
-    async getUserFromApi(id: number) {
+    async getUserFromApi(userId: number) {
         // return new ForbiddenException('000000000')
         // return this.exceptionService.badRequestException({ message: 'my |||| error getting user', code_error: 400 })
         // try {
-        const user = await this.externalApiService.getUserById(id)
+        const user = await this.externalApiService.getUserById(userId)
         return user
         // } catch (error) {
         //     // console.log('this is usecase', error)

@@ -19,7 +19,6 @@ export class User {
     last_name: string;
 
     @Column({
-        name: 'email_address',
         unique: true,
         nullable: false,
         default: '',
