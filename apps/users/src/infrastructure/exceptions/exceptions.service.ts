@@ -11,7 +11,11 @@ import { IExceptionService, IFormatExceptionMessage, IFormatCommonExceptionMessa
 @Injectable()
 export class ExceptionsService implements IExceptionService {
   requestException(data: IFormatCommonExceptionMessage): void {
-    throw new HttpException(data.message, data.code_error);
+    throw new HttpException({
+      status: data.code_error,
+      error: data.message,
+    }, data.code_error);
+
   }
   badRequestException({ message }: IFormatExceptionMessage): void {
     throw new BadRequestException(message);
