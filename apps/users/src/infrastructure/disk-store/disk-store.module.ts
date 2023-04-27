@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ExceptionsModule } from '../exceptions/exceptions.module';
+import { DiskStoreService } from './disk-store.service';
 
 @Module({
     imports: [
@@ -7,7 +8,7 @@ import { ExceptionsModule } from '../exceptions/exceptions.module';
         ExceptionsModule
     ],
     controllers: [],
-    providers: [],
-    exports: []
+    providers: [DiskStoreService],
+    exports: [DiskStoreService]
 })
 export class DiskStoreModule { }

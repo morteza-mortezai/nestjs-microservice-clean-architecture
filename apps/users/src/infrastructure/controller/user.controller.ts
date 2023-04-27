@@ -7,6 +7,13 @@ import { addUserUsecase } from '../../usecase/addUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { RMQ_MESSAGES } from '../constants/rmq.constants';
+import { HttpService } from '@nestjs/axios';
+const fs = require('fs');
+import * as stream from 'stream';
+import { promisify } from 'util';
+import { DiskStoreService } from '../disk-store/disk-store.service';
+const finished = promisify(stream.finished);
+
 
 @Controller()
 export class UserController {
@@ -17,6 +24,8 @@ export class UserController {
         private readonly getUserUsecaseProxy: UsecaseProxy<GetUserFromApiUsecase>,
         @Inject(UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY)
         private readonly getAvatarUsecaseProxy: UsecaseProxy<GetUserAvatarUsecase>,
+        private readonly http: HttpService,
+        private readonly disk: DiskStoreService,
     ) { }
     // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
     @Post('users')
@@ -48,15 +57,33 @@ export class UserController {
     @Get('user/:userId/avatar')
     // async createUser(@Payload() userId: number, @Ctx() context: RmqContext) {
     async getAvatarByUserId(@Param('userId', ParseIntPipe) userId: number) {
-        // return 'hello000'
+
+
         // try {
         const user = await this.getAvatarUsecaseProxy.getInstance().getAvatar(userId)
         return user
 
         // } catch (error) {
-        // console.log('ee', error)
-        // throw error
+        //     // console.log('ee', error)
+        //     throw error
         // }
     }
 
+    @Get('user/:userId/avatarff')
+    async downloadAndSaveAvatar(@Param('userId', ParseIntPipe) userId: number) {
+        this.http
+            .request({
+                method: 'get',
+                url: 'https://reqres.in/img/faces/1-image.jpg',
+                responseType: 'stream',
+            })
+
+            .subscribe(async (response) => {
+                return this.disk.writeStream(response.data, 'd.jpg')
+                // const writer = fs.createWriteStream('c.jpg');
+                // response.data.pipe(writer);
+                // return finished(writer);
+            })
+
+    }
 }

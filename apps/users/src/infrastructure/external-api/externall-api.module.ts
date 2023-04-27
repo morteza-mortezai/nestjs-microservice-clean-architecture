@@ -4,6 +4,7 @@ import { EnvironmentModule } from '../environment/environment.module';
 import { EnvironmentService } from '../environment/environment.service';
 import { ExternallApiService } from './externall-api.service';
 import { ExceptionsModule } from '../exceptions/exceptions.module';
+import { DiskStoreModule } from '../disk-store/disk-store.module';
 
 @Module({
     imports: [
@@ -15,7 +16,8 @@ import { ExceptionsModule } from '../exceptions/exceptions.module';
             }),
             inject: [EnvironmentService],
         }),
-        ExceptionsModule
+        ExceptionsModule,
+        DiskStoreModule
     ],
     controllers: [],
     providers: [ExternallApiService],

@@ -1,9 +1,9 @@
 import { IExceptionService } from "../domain/exceptions/exception-service.interface";
-import { UserExternallApi } from "../domain/external-api/externall-api.interface";
+import { IExternallApiService } from "../domain/external-api/externall-api.interface";
 
 export class GetUserFromApiUsecase {
     constructor(
-        private readonly externalApiService: UserExternallApi,
+        private readonly externalApiService: IExternallApiService,
         private readonly exceptionService: IExceptionService
     ) { }
 
