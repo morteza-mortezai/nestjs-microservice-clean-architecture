@@ -7,8 +7,8 @@ export class HashService {
         return bcrypt.hash(plainText, rounds);
     }
 
-    async generateHashForName(plainText: string, rounds: number = 10) {
-        const hashed = await this.generateHash(plainText, rounds)
+    async generateHashForName(plainText: string | number, rounds: number = 10) {
+        const hashed = await this.generateHash(plainText.toString(), rounds)
         return hashed.replace(/\//g, "")
     }
 }

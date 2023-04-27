@@ -6,7 +6,8 @@ import { UserM } from "../../domain/model/user";
 import { HttpService } from "@nestjs/axios";
 import { IExternallApiService } from "../../domain/external-api/externall-api.interface";
 import { DiskStoreService } from "../disk-store/disk-store.service";
-const path = require('path')
+import { join } from "path";
+// const path = require('path')
 
 
 @Injectable()
@@ -16,6 +17,7 @@ export class ExternallApiService implements IExternallApiService {
         private readonly exceptionService: ExceptionsService,
         private readonly diskStorageService: DiskStoreService,
     ) { }
+
     // async getUserById(id: number): Promise<any> {
     //     const { data } = await firstValueFrom(
     //         this.httpService.get<any[]>('http://localhost:3000/cats').pipe(
@@ -56,7 +58,7 @@ export class ExternallApiService implements IExternallApiService {
         // }
     }
 
-    async downloadAndSaveAvatar(url: string) {
+    async downloadAndSaveAvatar(url: string, hashedName: string) {
         this.httpService.request({
             method: 'get',
             url,
@@ -65,9 +67,9 @@ export class ExternallApiService implements IExternallApiService {
             // const writeStream = this.diskStorageService.createWriteStream(path)
             //ensure that the user can call `then()` only when the file has
             //been downloaded entirely.
-
-            return this.diskStorageService.writeStream(response.data, path)
-
+            // پسوند حذف شود
+            const uploadPath = join(process.cwd(), 'apps', 'users', 'uploads', hashedName + '.jpg')
+            return this.diskStorageService.writeStream(response.data, uploadPath)
         });
     }
 }

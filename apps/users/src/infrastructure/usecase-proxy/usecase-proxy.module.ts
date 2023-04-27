@@ -10,9 +10,10 @@ import { ExternallApiService } from '../external-api/externall-api.service';
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { DatabaseAvatarRepository } from '../repository/avatar.repository';
+import { HashModule, HashService } from '@app/common';
 @Module({
     imports: [
-        RepositoriesModule, ExceptionsModule, ExternallApiModule
+        RepositoriesModule, ExceptionsModule, ExternallApiModule, HashModule
     ]
 })
 export class UsecaseProxyModule {
@@ -34,9 +35,9 @@ export class UsecaseProxyModule {
                     useFactory: (externalApiService: ExternallApiService, exceptionsService: ExceptionsService) => new UsecaseProxy(new GetUserFromApiUsecase(externalApiService, exceptionsService))
                 },
                 {
-                    inject: [DatabaseAvatarRepository, DatabaseUserRepository, ExternallApiService, ExceptionsService],
+                    inject: [DatabaseAvatarRepository, DatabaseUserRepository, ExternallApiService, ExceptionsService, HashService],
                     provide: UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY,
-                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, databaseUserRepository: DatabaseUserRepository, externalApiService: ExternallApiService, exceptionsService: ExceptionsService) => new UsecaseProxy(new GetUserAvatarUsecase(databaseAvatarRepository, databaseUserRepository, exceptionsService, externalApiService))
+                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, databaseUserRepository: DatabaseUserRepository, externalApiService: ExternallApiService, exceptionsService: ExceptionsService, hashService: HashService) => new UsecaseProxy(new GetUserAvatarUsecase(databaseAvatarRepository, databaseUserRepository, exceptionsService, externalApiService, hashService))
                 },
             ],
             exports: [
