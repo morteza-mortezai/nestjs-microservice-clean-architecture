@@ -11,12 +11,12 @@ export class Avatar {
         unique: true,
         primary: true
     })
-    user_id: number;
+    userId: number;
 
     @Column({
         nullable: false,
         default: '',
     })
-    path: string;
+    hashedName: string;
 
 }

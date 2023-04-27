@@ -15,6 +15,7 @@ export class GetUserAvatarUsecase {
     ) { }
 
     async getAvatar(userId: number) {
+        const fileAddress = ''
         // search in db
         // const avatar = await this.avatarRepository.findByUserId(userId)
         // if (avatar && avatar.path) {
@@ -29,9 +30,12 @@ export class GetUserAvatarUsecase {
 
             // console.log('hash', userId)
             const hashedName = await this.hashService.generateHashForName(userId, 10)
-            // return hashedName
-            this.externalApiService.downloadAndSaveAvatar(user.avatar, hashedName)
+            // // return hashedName
+            await this.externalApiService.downloadAndSaveAvatar(user.avatar, hashedName)
+            // console.log('userId', userId, hashedName)
+            return this.avatarRepository.insertAvatar({ userId, hashedName })
         }
+
         // میشد ابتدا از طریق مدل ولیدیشن انجام داد
         // const exist = await this.userRepository.findByEmail(newUser.email)
         // console.log('exist', exist)
@@ -39,5 +43,6 @@ export class GetUserAvatarUsecase {
         // if (exist) throw this.exceptionService.badRequestException({ message: 'exist' })
         // const createdUser = await this.userRepository.insert(newUser)
         // return createdUser
+        return fileAddress
     }
 }
