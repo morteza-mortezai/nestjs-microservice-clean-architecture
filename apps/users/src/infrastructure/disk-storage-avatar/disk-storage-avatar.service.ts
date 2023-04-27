@@ -22,4 +22,9 @@ export class DiskStorageAvatarService implements IDiskStorageAvatar {
     const avatarPath = this._avatarFilePath(hashedName)
     return this.diskStorage.writeStream(response, avatarPath)
   }
+
+  checkAvatarFileExists(hashedName: string): Promise<boolean> {
+    const avatarPath = this._avatarFilePath(hashedName)
+    return this.diskStorage.checkFileExists(avatarPath)
+  }
 }

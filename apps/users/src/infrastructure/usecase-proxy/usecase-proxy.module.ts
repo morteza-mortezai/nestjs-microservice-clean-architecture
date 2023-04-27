@@ -37,9 +37,9 @@ export class UsecaseProxyModule {
                     useFactory: (externalApiService: ExternallApiService, exceptionsService: ExceptionsService) => new UsecaseProxy(new GetUserFromApiUsecase(externalApiService, exceptionsService))
                 },
                 {
-                    inject: [DatabaseAvatarRepository, DatabaseUserRepository, ExternallApiService, ExceptionsService, HashService, DiskStorageAvatarService],
+                    inject: [DatabaseAvatarRepository, ExternallApiService, ExceptionsService, HashService, DiskStorageAvatarService],
                     provide: UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY,
-                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, databaseUserRepository: DatabaseUserRepository, externalApiService: ExternallApiService, exceptionsService: ExceptionsService, hashService: HashService, diskStorageAvatarService: DiskStorageAvatarService) => new UsecaseProxy(new GetUserAvatarUsecase(databaseAvatarRepository, databaseUserRepository, exceptionsService, externalApiService, hashService, diskStorageAvatarService))
+                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, externalApiService: ExternallApiService, exceptionsService: ExceptionsService, hashService: HashService, diskStorageAvatarService: DiskStorageAvatarService) => new UsecaseProxy(new GetUserAvatarUsecase(databaseAvatarRepository, exceptionsService, externalApiService, hashService, diskStorageAvatarService))
                 },
             ],
             exports: [

@@ -35,4 +35,12 @@ export class DiskStorageService {
         // const filePath = path.join('uploads', fileName)
         return fsp.readFile(filePath, options);
     }
+
+    async checkFileExists(filePath: string): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            fs.access(filePath, fs.constants.F_OK, error => {
+                resolve(!error);
+            });
+        });
+    }
 }

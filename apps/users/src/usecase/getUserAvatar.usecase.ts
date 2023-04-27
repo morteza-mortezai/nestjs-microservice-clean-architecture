@@ -9,35 +9,36 @@ import { IDiskStorageAvatar } from "../domain/disk-storage-avatar/disk-storage-a
 export class GetUserAvatarUsecase {
     constructor(
         private readonly avatarRepository: AvatarRepository,
-        private readonly userRepository: UserRepository,
         private readonly exceptionService: IExceptionService,
         private readonly externalApiService: IExternallApiService,
         private readonly hashService: IHashService,
         private readonly diskStorageAvatar: IDiskStorageAvatar,
     ) { }
 
-    async getAvatar(userId: number) {
-        let hashedName = ''
-        // search in db
-        // const avatar = await this.avatarRepository.findByUserId(userId)
-        // if (avatar && avatar.path) {
-        //     // get path and get file by it's path
-
-        // }
-        // get user
-        const user = await this.externalApiService.getUserById(userId)
-        // return user
-        // get avatr 
-        if (user && user.avatar) {
-
-            // console.log('hash', userId)
-            hashedName = await this.hashService.generateHashForName(userId, 10)
-            // // return hashedName
-            await this.externalApiService.downloadAndSaveAvatar(user.avatar, hashedName)
-            // console.log('userId', userId, hashedName)
-            await this.avatarRepository.insertAvatar({ userId, hashedName })
-        }
-
+    private _sendAvatar(hashedName: string) {
         return this.diskStorageAvatar.readAvatarBase64(hashedName)
     }
+
+    async getAvatar(userId: number) {
+
+        // Search in db
+        const avatarRecord = await this.avatarRepository.findByUserId(userId)
+        // Exist
+        if (avatarRecord && avatarRecord.hashedName) {
+            const avatarFileExist = await this.diskStorageAvatar.checkAvatarFileExists(avatarRecord.hashedName)
+            if (avatarFileExist) return this._sendAvatar(avatarRecord.hashedName)
+        }
+
+        // Dosn't Exist
+        const user = await this.externalApiService.getUserById(userId)
+        if (!user.avatar) {
+            this.exceptionService.badRequestException({ message: 'this user has no avatar' })
+        }
+        const hashedName = await this.hashService.generateHashForName(userId, 10)
+        await this.externalApiService.downloadAndSaveAvatar(user.avatar, hashedName)
+        await this.avatarRepository.insertAvatar({ userId, hashedName })
+
+        return this._sendAvatar(hashedName)
+    }
+
 }
