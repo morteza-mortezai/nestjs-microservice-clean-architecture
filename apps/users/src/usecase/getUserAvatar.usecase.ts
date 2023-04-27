@@ -4,6 +4,7 @@ import { UserRepository } from "../domain/repository/userRepository.interface";
 import { IExternallApiService } from "../domain/external-api/externall-api.interface";
 import { AvatarRepository } from "../domain/repository/avatarRepository.interface";
 import { IHashService } from "../domain/hash-service/hash-service.interface";
+import { IDiskStorageAvatar } from "../domain/disk-storage-avatar/disk-storage-avatar.interface";
 
 export class GetUserAvatarUsecase {
     constructor(
@@ -11,11 +12,12 @@ export class GetUserAvatarUsecase {
         private readonly userRepository: UserRepository,
         private readonly exceptionService: IExceptionService,
         private readonly externalApiService: IExternallApiService,
-        private readonly hashService: IHashService
+        private readonly hashService: IHashService,
+        private readonly diskStorageAvatar: IDiskStorageAvatar,
     ) { }
 
     async getAvatar(userId: number) {
-        const fileAddress = ''
+        let hashedName = ''
         // search in db
         // const avatar = await this.avatarRepository.findByUserId(userId)
         // if (avatar && avatar.path) {
@@ -29,20 +31,13 @@ export class GetUserAvatarUsecase {
         if (user && user.avatar) {
 
             // console.log('hash', userId)
-            const hashedName = await this.hashService.generateHashForName(userId, 10)
+            hashedName = await this.hashService.generateHashForName(userId, 10)
             // // return hashedName
             await this.externalApiService.downloadAndSaveAvatar(user.avatar, hashedName)
             // console.log('userId', userId, hashedName)
-            return this.avatarRepository.insertAvatar({ userId, hashedName })
+            await this.avatarRepository.insertAvatar({ userId, hashedName })
         }
 
-        // میشد ابتدا از طریق مدل ولیدیشن انجام داد
-        // const exist = await this.userRepository.findByEmail(newUser.email)
-        // console.log('exist', exist)
-        // if (exist) throw new Error('this email is registered already !')
-        // if (exist) throw this.exceptionService.badRequestException({ message: 'exist' })
-        // const createdUser = await this.userRepository.insert(newUser)
-        // return createdUser
-        return fileAddress
+        return this.diskStorageAvatar.readAvatarBase64(hashedName)
     }
 }

@@ -11,9 +11,11 @@ import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { DatabaseAvatarRepository } from '../repository/avatar.repository';
 import { HashModule, HashService } from '@app/common';
+import { DiskStorageAvatarModule } from '../disk-storage-avatar/disk-storage-avatar.module';
+import { DiskStorageAvatarService } from '../disk-storage-avatar/disk-storage-avatar.service';
 @Module({
     imports: [
-        RepositoriesModule, ExceptionsModule, ExternallApiModule, HashModule
+        RepositoriesModule, ExceptionsModule, ExternallApiModule, HashModule, DiskStorageAvatarModule
     ]
 })
 export class UsecaseProxyModule {
@@ -35,9 +37,9 @@ export class UsecaseProxyModule {
                     useFactory: (externalApiService: ExternallApiService, exceptionsService: ExceptionsService) => new UsecaseProxy(new GetUserFromApiUsecase(externalApiService, exceptionsService))
                 },
                 {
-                    inject: [DatabaseAvatarRepository, DatabaseUserRepository, ExternallApiService, ExceptionsService, HashService],
+                    inject: [DatabaseAvatarRepository, DatabaseUserRepository, ExternallApiService, ExceptionsService, HashService, DiskStorageAvatarService],
                     provide: UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY,
-                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, databaseUserRepository: DatabaseUserRepository, externalApiService: ExternallApiService, exceptionsService: ExceptionsService, hashService: HashService) => new UsecaseProxy(new GetUserAvatarUsecase(databaseAvatarRepository, databaseUserRepository, exceptionsService, externalApiService, hashService))
+                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, databaseUserRepository: DatabaseUserRepository, externalApiService: ExternallApiService, exceptionsService: ExceptionsService, hashService: HashService, diskStorageAvatarService: DiskStorageAvatarService) => new UsecaseProxy(new GetUserAvatarUsecase(databaseAvatarRepository, databaseUserRepository, exceptionsService, externalApiService, hashService, diskStorageAvatarService))
                 },
             ],
             exports: [

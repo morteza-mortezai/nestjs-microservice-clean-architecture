@@ -1,17 +1,16 @@
 import { HttpException, Injectable, BadRequestException } from "@nestjs/common";
-import { ExceptionsService } from "../exceptions/exceptions.service";
-import { HttpService } from "@nestjs/axios";
 import { createReadStream } from 'fs'
 import { Response } from "express";
 import path from 'path'
-const fs = require('fs');
+import * as fs from 'fs'
+import * as fsp from 'fs/promises'
 import * as stream from 'stream';
 import { promisify } from 'util';
 const finished = promisify(stream.finished);
 
 // import {} from ''
 @Injectable()
-export class DiskStoreService {
+export class DiskStorageService {
 
     getFile(filePath: string, res: Response) {
         const file = createReadStream(path.join(process.cwd(), filePath));
@@ -31,5 +30,9 @@ export class DiskStoreService {
         // const writer = fs.createWriteStream('c.jpg');
         // response.data.pipe(writer);
         // return finished(writer);
+    }
+    async readFile(filePath: string, options: any) {
+        // const filePath = path.join('uploads', fileName)
+        return fsp.readFile(filePath, options);
     }
 }

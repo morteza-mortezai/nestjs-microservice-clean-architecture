@@ -11,7 +11,7 @@ import { HttpService } from '@nestjs/axios';
 const fs = require('fs');
 import * as stream from 'stream';
 import { promisify } from 'util';
-import { DiskStoreService } from '../disk-store/disk-store.service';
+// import { DiskStoreService } from '../disk-store/disk-store.service';
 const finished = promisify(stream.finished);
 
 
@@ -25,7 +25,7 @@ export class UserController {
         @Inject(UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY)
         private readonly getAvatarUsecaseProxy: UsecaseProxy<GetUserAvatarUsecase>,
         private readonly http: HttpService,
-        private readonly disk: DiskStoreService,
+        // private readonly disk: DiskStoreService,
     ) { }
     // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
     @Post('users')
@@ -69,21 +69,21 @@ export class UserController {
         // }
     }
 
-    @Get('user/:userId/avatarff')
-    async downloadAndSaveAvatar(@Param('userId', ParseIntPipe) userId: number) {
-        this.http
-            .request({
-                method: 'get',
-                url: 'https://reqres.in/img/faces/1-image.jpg',
-                responseType: 'stream',
-            })
+    // @Get('user/:userId/avatarff')
+    // async downloadAndSaveAvatar(@Param('userId', ParseIntPipe) userId: number) {
+    //     this.http
+    //         .request({
+    //             method: 'get',
+    //             url: 'https://reqres.in/img/faces/1-image.jpg',
+    //             responseType: 'stream',
+    //         })
 
-            .subscribe(async (response) => {
-                return this.disk.writeStream(response.data, 'd.jpg')
-                // const writer = fs.createWriteStream('c.jpg');
-                // response.data.pipe(writer);
-                // return finished(writer);
-            })
+    //         .subscribe(async (response) => {
+    //             return this.disk.writeStream(response.data, 'd.jpg')
+    //             // const writer = fs.createWriteStream('c.jpg');
+    //             // response.data.pipe(writer);
+    //             // return finished(writer);
+    //         })
 
-    }
+    // }
 }
