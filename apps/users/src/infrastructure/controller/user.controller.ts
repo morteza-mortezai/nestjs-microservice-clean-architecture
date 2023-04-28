@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Inject, HttpException, HttpStatus, ParseIntPipe, Param } from '@nestjs/common';
+import { Controller, Post, Get, Body, Inject, HttpException, HttpStatus, ParseIntPipe, Param, Delete } from '@nestjs/common';
 import { MessagePattern, Payload, RmqContext, Ctx } from '@nestjs/microservices'
 import { CreateUserDto } from '../dto/createUser.dto';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
@@ -6,11 +6,13 @@ import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
 import { addUserUsecase } from '../../usecase/addUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
+import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
 import { RMQ_MESSAGES } from '../constants/rmq.constants';
 import { HttpService } from '@nestjs/axios';
 const fs = require('fs');
 import * as stream from 'stream';
 import { promisify } from 'util';
+import { DatabaseAvatarRepository } from '../repository/avatar.repository';
 // import { DiskStoreService } from '../disk-store/disk-store.service';
 const finished = promisify(stream.finished);
 
@@ -24,7 +26,9 @@ export class UserController {
         private readonly getUserUsecaseProxy: UsecaseProxy<GetUserFromApiUsecase>,
         @Inject(UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY)
         private readonly getAvatarUsecaseProxy: UsecaseProxy<GetUserAvatarUsecase>,
-        private readonly http: HttpService,
+        @Inject(UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY)
+        private readonly deleteAvatarUsecase: UsecaseProxy<DeleteAvatarUsecase>,
+
         // private readonly disk: DiskStoreService,
     ) { }
     // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
@@ -57,33 +61,12 @@ export class UserController {
     @Get('user/:userId/avatar')
     // async createUser(@Payload() userId: number, @Ctx() context: RmqContext) {
     async getAvatarByUserId(@Param('userId', ParseIntPipe) userId: number) {
-
-
-        // try {
         const user = await this.getAvatarUsecaseProxy.getInstance().getAvatar(userId)
         return user
-
-        // } catch (error) {
-        //     // console.log('ee', error)
-        //     throw error
-        // }
     }
 
-    // @Get('user/:userId/avatarff')
-    // async downloadAndSaveAvatar(@Param('userId', ParseIntPipe) userId: number) {
-    //     this.http
-    //         .request({
-    //             method: 'get',
-    //             url: 'https://reqres.in/img/faces/1-image.jpg',
-    //             responseType: 'stream',
-    //         })
-
-    //         .subscribe(async (response) => {
-    //             return this.disk.writeStream(response.data, 'd.jpg')
-    //             // const writer = fs.createWriteStream('c.jpg');
-    //             // response.data.pipe(writer);
-    //             // return finished(writer);
-    //         })
-
-    // }
+    @Delete('user/:userId/avatar')
+    async deleteAvatar(@Param('userId', ParseIntPipe) userId: number) {
+        return this.deleteAvatarUsecase.getInstance().deleteAvatar(userId)
+    }
 }

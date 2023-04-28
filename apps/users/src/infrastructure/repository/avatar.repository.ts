@@ -8,8 +8,9 @@ import { AvatarM } from '../../domain/model/avatar';
 
 @Injectable()
 export class DatabaseAvatarRepository implements AvatarRepository {
-
-    constructor(@InjectRepository(Avatar) private readonly avatarEntity: Repository<AvatarM>) { }
+    constructor(
+        @InjectRepository(Avatar) private readonly avatarEntity: Repository<AvatarM>,
+    ) { }
 
     insertAvatar(createAvatardata: AvatarM): Promise<AvatarM> {
         const newAvatar = this.avatarEntity.create(createAvatardata)
@@ -20,5 +21,10 @@ export class DatabaseAvatarRepository implements AvatarRepository {
     findByUserId(userId: number): Promise<AvatarM> {
         return this.avatarEntity.findOneBy({ userId })
     }
+
+    deleteAvatar(userId: number): Promise<any> {
+        return this.avatarEntity.delete({ userId })
+    }
+
 
 }

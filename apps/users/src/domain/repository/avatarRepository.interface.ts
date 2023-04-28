@@ -3,4 +3,5 @@ import { AvatarM } from "../model/avatar";
 export interface AvatarRepository {
     insertAvatar(user: AvatarM): Promise<AvatarM>
     findByUserId(user_id: number): Promise<AvatarM | undefined>
+    deleteAvatar(userId: number): Promise<any>
 }

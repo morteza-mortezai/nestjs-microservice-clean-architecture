@@ -27,4 +27,8 @@ export class DiskStorageAvatarService implements IDiskStorageAvatar {
     const avatarPath = this._avatarFilePath(hashedName)
     return this.diskStorage.checkFileExists(avatarPath)
   }
+  deleteAvatarFile(hashedName: string): Promise<void> {
+    const avatarPath = this._avatarFilePath(hashedName)
+    return this.diskStorage.deleteFile(avatarPath)
+  }
 }

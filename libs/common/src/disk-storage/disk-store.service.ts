@@ -16,9 +16,7 @@ export class DiskStorageService {
         const file = createReadStream(path.join(process.cwd(), filePath));
         file.pipe(res);
     }
-    createPath(fileName: string) {
-        const filePath = path.join('uploads', fileName)
-    }
+
     // async readFile(filePath: string) {
     //     return fsp.readFile(filePath, { encoding: 'base64' });
     // }
@@ -42,5 +40,9 @@ export class DiskStorageService {
                 resolve(!error);
             });
         });
+    }
+
+    deleteFile(filePath: string): Promise<void> {
+        return fsp.unlink(filePath)
     }
 }

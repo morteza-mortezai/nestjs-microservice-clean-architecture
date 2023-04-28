@@ -9,6 +9,7 @@ import { ExternallApiModule } from '../external-api/externall-api.module'
 import { ExternallApiService } from '../external-api/externall-api.service';
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
+import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
 import { DatabaseAvatarRepository } from '../repository/avatar.repository';
 import { HashModule, HashService } from '@app/common';
 import { DiskStorageAvatarModule } from '../disk-storage-avatar/disk-storage-avatar.module';
@@ -22,6 +23,7 @@ export class UsecaseProxyModule {
     static POST_USER_USECASES_PROXY = 'postUserUsecasesProxy';
     static Get_USER_FROM_API_USECASES_PROXY = 'getUserFromExternallApiUsecasesProxy';
     static Get_USER_AVATAR_USECASES_PROXY = 'getUserAvatarUsecasesProxy';
+    static Delete_USER_AVATAR_USECASES_PROXY = 'deleteUserAvatarUsecasesProxy';
     static register(): DynamicModule {
         return {
             module: UsecaseProxyModule,
@@ -41,11 +43,17 @@ export class UsecaseProxyModule {
                     provide: UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY,
                     useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, externalApiService: ExternallApiService, exceptionsService: ExceptionsService, hashService: HashService, diskStorageAvatarService: DiskStorageAvatarService) => new UsecaseProxy(new GetUserAvatarUsecase(databaseAvatarRepository, exceptionsService, externalApiService, hashService, diskStorageAvatarService))
                 },
+                {
+                    inject: [DatabaseAvatarRepository, DiskStorageAvatarService, ExceptionsService],
+                    provide: UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY,
+                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, diskStorageAvatarService: DiskStorageAvatarService, exceptionsService: ExceptionsService) => new UsecaseProxy(new DeleteAvatarUsecase(databaseAvatarRepository, diskStorageAvatarService, exceptionsService))
+                },
             ],
             exports: [
                 UsecaseProxyModule.POST_USER_USECASES_PROXY,
                 UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY,
-                UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY
+                UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY,
+                UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY
             ]
         }
     }
