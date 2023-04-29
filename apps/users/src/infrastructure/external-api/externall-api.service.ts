@@ -36,18 +36,18 @@ export class ExternallApiService implements IExternallApiService {
         const { data } = await firstValueFrom(
             this.httpService
                 .get<{ data: UserM }>(`https://reqres.in/api/users/${id}`)
-                .pipe(
-                    catchError((error: AxiosError) => {
-                        //   this.logger.error(error.response.data);
-                        // throw 'An error happened!';
-                        // console.log('error.message', error.message)
-                        // console.log('error.isAxiosError', error.isAxiosError)
-                        // console.log('error.name', error.name)
-                        // console.log('error.response', error.response)
-                        throw this.exceptionService.requestException({ message: error?.response?.statusText, code_error: error?.response?.status })
-                    }
-                    ),
-                )
+            // .pipe(
+            //     catchError((error: AxiosError) => {
+            //         //   this.logger.error(error.response.data);
+            //         // throw 'An error happened!';
+            //         // console.log('error.message', error.message)
+            //         // console.log('error.isAxiosError', error.isAxiosError)
+            //         // console.log('error.name', error.name)
+            //         // console.log('error.response', error.response)
+            //         throw this.exceptionService.requestException({ message: error?.response?.statusText, code_error: error?.response?.status })
+            //     }
+            //     ),
+            // )
         );
 
         return data.data;

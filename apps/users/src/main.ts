@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { RMQ_SERVICES } from './infrastructure/constants/rmq.constants';
 import { EnvironmentService } from './infrastructure/environment/environment.service';
 import { GLOBAL_API_PREFIX } from './infrastructure/constants/app.constant';
-import { HttpExceptionFilter } from '@app/common/filter/exception.filter';
+import { GlobalExceptionFilter } from '@app/common/filter/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +13,7 @@ async function bootstrap() {
   app.setGlobalPrefix(GLOBAL_API_PREFIX)
   const environmentService = app.get<EnvironmentService>(EnvironmentService)
   // app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS))
-  // app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new GlobalExceptionFilter());
   // await app.startAllMicroservices()
   app.listen(environmentService.getAppPort())
 

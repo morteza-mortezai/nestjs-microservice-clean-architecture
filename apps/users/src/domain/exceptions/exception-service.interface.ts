@@ -1,5 +1,3 @@
-// import { IException } from "./exception.interface";
-
 export interface IFormatCommonExceptionMessage {
   message: string;
   code_error: number;
@@ -13,5 +11,5 @@ export interface IExceptionService {
   badRequestException(data: IFormatExceptionMessage): void;
   internalServerErrorException(data?: IFormatExceptionMessage): void;
   forbiddenException(data?: IFormatExceptionMessage): void;
-  UnauthorizedException(data?: IFormatExceptionMessage): void;
+  conflictException(data?: IFormatExceptionMessage): void;
 }

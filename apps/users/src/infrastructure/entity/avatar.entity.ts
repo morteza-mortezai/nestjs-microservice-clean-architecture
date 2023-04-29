@@ -2,7 +2,6 @@ import { Column, Entity, ObjectIdColumn, ObjectId } from 'typeorm';
 
 @Entity()
 export class Avatar {
-
     @ObjectIdColumn()
     _id: ObjectId
 
@@ -11,6 +10,7 @@ export class Avatar {
         unique: true,
         primary: true
     })
+    // TODO : convert to kebab
     userId: number;
 
     @Column({

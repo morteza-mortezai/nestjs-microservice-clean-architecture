@@ -5,6 +5,7 @@ import {
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
+  ConflictException
 } from '@nestjs/common';
 import { IExceptionService, IFormatExceptionMessage, IFormatCommonExceptionMessage } from '../../domain/exceptions/exception-service.interface';
 
@@ -22,7 +23,7 @@ export class ExceptionsService implements IExceptionService {
   forbiddenException({ message }: IFormatExceptionMessage): void {
     throw new ForbiddenException(message);
   }
-  UnauthorizedException({ message }: IFormatExceptionMessage): void {
-    throw new UnauthorizedException(message);
+  conflictException({ message }: IFormatExceptionMessage): void {
+    throw new ConflictException(message);
   }
 }

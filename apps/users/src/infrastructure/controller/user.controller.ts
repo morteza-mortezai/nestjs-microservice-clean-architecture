@@ -34,14 +34,14 @@ export class UserController {
     // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
     @Post('users')
     async createUser(@Payload() createUser: CreateUserDto) {
-        try {
-            const createdUser = await this.postUserUsecase.getInstance().addUser(createUser as any)
-            return createdUser
+        // try {
+        const createdUser = await this.postUserUsecase.getInstance().addUser(createUser as any)
+        return createdUser
 
-        } catch (error) {
-            console.log('ee', error)
-            return error
-        }
+        // } catch (error) {
+        //     console.log('ee', error)
+        //     return error
+        // }
     }
 
     @Get('user/:userId')
