@@ -1,20 +1,20 @@
 import { IExceptionService } from "../domain/exceptions/exception-service.interface";
-import { AvatarRepository } from "../domain/repository/avatarRepository.interface";
+import { IAvatarDataSource } from "../domain/repository/avatarDataSource.interface";
 import { IDiskStorageAvatar } from "../domain/disk-storage-avatar/disk-storage-avatar.interface";
 
 export class DeleteAvatarUsecase {
     constructor(
-        private readonly avatarRepository: AvatarRepository,
+        private readonly avatarDataSource: IAvatarDataSource,
         private readonly diskStorageAvatar: IDiskStorageAvatar,
         private readonly exceptionService: IExceptionService,
     ) { }
 
     private _deleteAvatarDatabaseRecord(userId: number) {
-        return this.avatarRepository.deleteAvatar(userId)
+        return this.avatarDataSource.deleteAvatar(userId)
     }
 
     async deleteAvatar(userId: number) {
-        const avatarRecord = await this.avatarRepository.findByUserId(userId)
+        const avatarRecord = await this.avatarDataSource.findAvatarByUserId(userId)
         if (!avatarRecord) {
             this.exceptionService.badRequestException({ message: 'This User has no Avatar saved' })
         }

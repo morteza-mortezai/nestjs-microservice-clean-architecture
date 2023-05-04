@@ -18,7 +18,12 @@ import { Repository, EntityManager } from 'typeorm'
             provide: 'avatarRepository',
             useFactory: (manager: EntityManager) => (new GenericRepository(new Repository(Avatar, manager))),
             inject: [EntityManager]
-        }
+        },
+        {
+            provide: 'userRepository',
+            useFactory: (manager: EntityManager) => (new GenericRepository(new Repository(User, manager))),
+            inject: [EntityManager]
+        },
     ],
     exports: [UserDataSource, AvatarDataSource]
 })

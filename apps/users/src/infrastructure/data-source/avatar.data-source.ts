@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Avatar } from '../entity/avatar.entity';
 import { IAvatarDataSource } from '../../domain/repository/avatarDataSource.interface';
 import { AvatarM } from '../../domain/model/avatar';
 import { GenericRepository } from '@app/common';
+// import { Avatar } from '../entity/avatar.entity';
 // import { InjectRepository } from '@nestjs/typeorm';
 // import { Repository } from 'typeorm'
 
