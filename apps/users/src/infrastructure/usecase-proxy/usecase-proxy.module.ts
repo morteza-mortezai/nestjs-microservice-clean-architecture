@@ -14,9 +14,11 @@ import { AvatarDataSource } from '../data-source/avatar.data-source';
 import { HashModule, HashService } from '@app/common';
 import { DiskStorageAvatarModule } from '../disk-storage-avatar/disk-storage-avatar.module';
 import { DiskStorageAvatarService } from '../disk-storage-avatar/disk-storage-avatar.service';
+import { MessageBrokerService } from '../message-broker/message-broker.service';
+import { MessageBrokerModule } from '../message-broker/message-broker.module';
 @Module({
     imports: [
-        DataSourceModule, ExceptionsModule, ExternallApiModule, HashModule, DiskStorageAvatarModule
+        DataSourceModule, ExceptionsModule, ExternallApiModule, HashModule, DiskStorageAvatarModule, MessageBrokerModule
     ]
 })
 export class UsecaseProxyModule {
@@ -29,9 +31,9 @@ export class UsecaseProxyModule {
             module: UsecaseProxyModule,
             providers: [
                 {
-                    inject: [UserDataSource, ExceptionsService],
+                    inject: [UserDataSource, ExceptionsService, MessageBrokerService],
                     provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
-                    useFactory: (UserDataSource: UserDataSource, exceptionsService: ExceptionsService) => new UsecaseProxy(new createUserUsecase(UserDataSource, exceptionsService))
+                    useFactory: (UserDataSource: UserDataSource, exceptionsService: ExceptionsService, messageBrokerService: MessageBrokerService) => new UsecaseProxy(new createUserUsecase(UserDataSource, exceptionsService, messageBrokerService))
                 },
                 {
                     inject: [ExternallApiService, ExceptionsService],

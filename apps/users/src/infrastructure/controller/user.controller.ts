@@ -7,12 +7,13 @@ import { createUserUsecase } from '../../usecase/createUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
-import { RMQ_MESSAGES } from '../config/constants/rmq.constants';
+import { RMQ_MESSAGES } from '@app/common/constants/rmq.constant';
 import { HttpService } from '@nestjs/axios';
 const fs = require('fs');
 import * as stream from 'stream';
 import { promisify } from 'util';
 import { AvatarDataSource } from '../data-source/avatar.data-source';
+import { MessageBrokerService } from '../message-broker/message-broker.service';
 // import { DiskStoreService } from '../disk-store/disk-store.service';
 const finished = promisify(stream.finished);
 
@@ -28,6 +29,7 @@ export class UserController {
         private readonly getAvatarUsecaseProxy: UsecaseProxy<GetUserAvatarUsecase>,
         @Inject(UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY)
         private readonly deleteAvatarUsecase: UsecaseProxy<DeleteAvatarUsecase>,
+        private readonly messageBroker: MessageBrokerService
 
         // private readonly disk: DiskStoreService,
     ) { }
@@ -68,5 +70,10 @@ export class UserController {
     @Delete('user/:userId/avatar')
     async deleteAvatar(@Param('userId', ParseIntPipe) userId: number) {
         return this.deleteAvatarUsecase.getInstance().deleteAvatar(userId)
+    }
+
+    @Get('test/:userId')
+    async test(@Param('userId', ParseIntPipe) userId: number) {
+        return this.messageBroker.emitUserCreatedEventToMailer({ userId: 1 } as any)
     }
 }

@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { RMQ_SERVICES } from './infrastructure/config/constants/rmq.constants';
+import { RMQ_SERVICES } from '@app/common/constants/rmq.constant';
 import { EnvironmentService } from './infrastructure/config/environment/environment.service';
 import { GLOBAL_API_PREFIX } from './infrastructure/config/constants/app.constant';
 import { GlobalExceptionFilter } from '@app/common/filter/exception.filter';
@@ -12,9 +12,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix(GLOBAL_API_PREFIX)
   const environmentService = app.get<EnvironmentService>(EnvironmentService)
-  // app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS))
+  app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.MAILER))
   app.useGlobalFilters(new GlobalExceptionFilter());
-  // await app.startAllMicroservices()
+  await app.startAllMicroservices()
   app.listen(environmentService.getAppPort())
 
 }
