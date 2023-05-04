@@ -7,7 +7,7 @@ import { createUserUsecase } from '../../usecase/createUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
-import { RMQ_MESSAGES } from '../constants/rmq.constants';
+import { RMQ_MESSAGES } from '../config/constants/rmq.constants';
 import { HttpService } from '@nestjs/axios';
 const fs = require('fs');
 import * as stream from 'stream';

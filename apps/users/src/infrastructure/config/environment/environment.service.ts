@@ -1,8 +1,8 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { RmqConfig } from '../../domain/environment/rmq.interface';
-import { AppConfig } from '../../domain/environment/app.interface';
-import { HttpConfig } from '../../domain/environment/http.interface';
+import { RmqConfig } from '../../../domain/environment/rmq.interface';
+import { AppConfig } from '../../../domain/environment/app.interface';
+import { HttpConfig } from '../../../domain/environment/http.interface';
 import { ClientOptions, Transport } from '@nestjs/microservices';
 
 @Injectable()
