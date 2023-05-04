@@ -2,7 +2,7 @@ import { IExceptionService } from "../domain/exceptions/exception-service.interf
 import { UserM } from "../domain/model/user";
 import { UserRepository } from "../domain/repository/userRepository.interface";
 
-export class addUserUsecase {
+export class createUserUsecase {
     constructor(// TODO change user repository to userDbService
         private readonly userRepository: UserRepository,
         private readonly exceptionService: IExceptionService

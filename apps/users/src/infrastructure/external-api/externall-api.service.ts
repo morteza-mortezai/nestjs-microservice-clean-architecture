@@ -1,7 +1,7 @@
 import { HttpException, Injectable, BadRequestException } from "@nestjs/common";
 import { catchError, firstValueFrom, lastValueFrom } from 'rxjs'
 import { AxiosError } from 'axios'
-import { ExceptionsService } from "../exceptions/exceptions.service";
+import { ExceptionsService } from "../../../../../libs/common/src/exceptions/exceptions.service";
 import { UserM } from "../../domain/model/user";
 import { HttpService } from "@nestjs/axios";
 import { IExternallApiService } from "../../domain/external-api/externall-api.interface";

@@ -3,7 +3,7 @@ import { MessagePattern, Payload, RmqContext, Ctx } from '@nestjs/microservices'
 import { CreateUserDto } from '../dto/createUser.dto';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
 import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
-import { addUserUsecase } from '../../usecase/addUser.usecase'
+import { createUserUsecase } from '../../usecase/createUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
@@ -12,7 +12,7 @@ import { HttpService } from '@nestjs/axios';
 const fs = require('fs');
 import * as stream from 'stream';
 import { promisify } from 'util';
-import { DatabaseAvatarRepository } from '../repository/avatar.repository';
+import { AvatarDataSource } from '../data-source/avatar.data-source';
 // import { DiskStoreService } from '../disk-store/disk-store.service';
 const finished = promisify(stream.finished);
 
@@ -21,7 +21,7 @@ const finished = promisify(stream.finished);
 export class UserController {
     constructor(
         @Inject(UsecaseProxyModule.POST_USER_USECASES_PROXY)
-        private readonly postUserUsecase: UsecaseProxy<addUserUsecase>,
+        private readonly postUserUsecase: UsecaseProxy<createUserUsecase>,
         @Inject(UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY)
         private readonly getUserUsecaseProxy: UsecaseProxy<GetUserFromApiUsecase>,
         @Inject(UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY)

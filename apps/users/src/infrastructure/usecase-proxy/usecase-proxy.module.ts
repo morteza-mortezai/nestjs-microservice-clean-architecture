@@ -1,22 +1,22 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { RepositoriesModule } from '../repository/repositories.module';
-import { addUserUsecase } from '../../usecase/addUser.usecase'
-import { DatabaseUserRepository } from '../../infrastructure/repository/user.repository'
+import { DataSourceModule } from '../data-source/data-source.module';
+import { createUserUsecase } from '../../usecase/createUser.usecase'
+import { UserDataSource } from '../data-source/user.data-source'
 import { UsecaseProxy } from './usecase-proxy'
-import { ExceptionsService } from '../exceptions/exceptions.service';
-import { ExceptionsModule } from '../exceptions/exceptions.module';
+import { ExceptionsService } from '../../../../../libs/common/src/exceptions/exceptions.service';
+import { ExceptionsModule } from '../../../../../libs/common/src/exceptions/exceptions.module';
 import { ExternallApiModule } from '../external-api/externall-api.module'
 import { ExternallApiService } from '../external-api/externall-api.service';
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
-import { DatabaseAvatarRepository } from '../repository/avatar.repository';
+import { AvatarDataSource } from '../data-source/avatar.data-source';
 import { HashModule, HashService } from '@app/common';
 import { DiskStorageAvatarModule } from '../disk-storage-avatar/disk-storage-avatar.module';
 import { DiskStorageAvatarService } from '../disk-storage-avatar/disk-storage-avatar.service';
 @Module({
     imports: [
-        RepositoriesModule, ExceptionsModule, ExternallApiModule, HashModule, DiskStorageAvatarModule
+        DataSourceModule, ExceptionsModule, ExternallApiModule, HashModule, DiskStorageAvatarModule
     ]
 })
 export class UsecaseProxyModule {
@@ -29,9 +29,9 @@ export class UsecaseProxyModule {
             module: UsecaseProxyModule,
             providers: [
                 {
-                    inject: [DatabaseUserRepository, ExceptionsService],
+                    inject: [UserDataSource, ExceptionsService],
                     provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
-                    useFactory: (databaseUserRepository: DatabaseUserRepository, exceptionsService: ExceptionsService) => new UsecaseProxy(new addUserUsecase(databaseUserRepository, exceptionsService))
+                    useFactory: (UserDataSource: UserDataSource, exceptionsService: ExceptionsService) => new UsecaseProxy(new createUserUsecase(UserDataSource, exceptionsService))
                 },
                 {
                     inject: [ExternallApiService, ExceptionsService],
@@ -39,14 +39,14 @@ export class UsecaseProxyModule {
                     useFactory: (externalApiService: ExternallApiService, exceptionsService: ExceptionsService) => new UsecaseProxy(new GetUserFromApiUsecase(externalApiService, exceptionsService))
                 },
                 {
-                    inject: [DatabaseAvatarRepository, ExternallApiService, ExceptionsService, HashService, DiskStorageAvatarService],
+                    inject: [AvatarDataSource, ExternallApiService, ExceptionsService, HashService, DiskStorageAvatarService],
                     provide: UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY,
-                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, externalApiService: ExternallApiService, exceptionsService: ExceptionsService, hashService: HashService, diskStorageAvatarService: DiskStorageAvatarService) => new UsecaseProxy(new GetUserAvatarUsecase(databaseAvatarRepository, exceptionsService, externalApiService, hashService, diskStorageAvatarService))
+                    useFactory: (AvatarDataSource: AvatarDataSource, externalApiService: ExternallApiService, exceptionsService: ExceptionsService, hashService: HashService, diskStorageAvatarService: DiskStorageAvatarService) => new UsecaseProxy(new GetUserAvatarUsecase(AvatarDataSource, exceptionsService, externalApiService, hashService, diskStorageAvatarService))
                 },
                 {
-                    inject: [DatabaseAvatarRepository, DiskStorageAvatarService, ExceptionsService],
+                    inject: [AvatarDataSource, DiskStorageAvatarService, ExceptionsService],
                     provide: UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY,
-                    useFactory: (databaseAvatarRepository: DatabaseAvatarRepository, diskStorageAvatarService: DiskStorageAvatarService, exceptionsService: ExceptionsService) => new UsecaseProxy(new DeleteAvatarUsecase(databaseAvatarRepository, diskStorageAvatarService, exceptionsService))
+                    useFactory: (AvatarDataSource: AvatarDataSource, diskStorageAvatarService: DiskStorageAvatarService, exceptionsService: ExceptionsService) => new UsecaseProxy(new DeleteAvatarUsecase(AvatarDataSource, diskStorageAvatarService, exceptionsService))
                 },
             ],
             exports: [

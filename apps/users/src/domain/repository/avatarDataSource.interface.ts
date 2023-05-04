@@ -1,7 +1,7 @@
 import { AvatarM } from "../model/avatar";
 // TODO : add I fot interface
-export interface AvatarRepository {
+export interface IAvatarDataSource {
     insertAvatar(user: AvatarM): Promise<AvatarM>
-    findByUserId(user_id: number): Promise<AvatarM | undefined>
+    findAvatarByUserId(user_id: number): Promise<AvatarM | undefined>
     deleteAvatar(userId: number): Promise<any>
 }

@@ -2,13 +2,13 @@ import { IExceptionService } from "../domain/exceptions/exception-service.interf
 import { UserM } from "../domain/model/user";
 import { UserRepository } from "../domain/repository/userRepository.interface";
 import { IExternallApiService } from "../domain/external-api/externall-api.interface";
-import { AvatarRepository } from "../domain/repository/avatarRepository.interface";
+import { IAvatarDataSource } from "../domain/repository/avatarDataSource.interface";
 import { IHashService } from "../domain/hash-service/hash-service.interface";
 import { IDiskStorageAvatar } from "../domain/disk-storage-avatar/disk-storage-avatar.interface";
 
 export class GetUserAvatarUsecase {
     constructor(
-        private readonly avatarRepository: AvatarRepository,
+        private readonly avatarDataSource: IAvatarDataSource,
         private readonly exceptionService: IExceptionService,
         private readonly externalApiService: IExternallApiService,
         private readonly hashService: IHashService,
@@ -22,7 +22,7 @@ export class GetUserAvatarUsecase {
     async getAvatar(userId: number) {
 
         // Search in db
-        const avatarRecord = await this.avatarRepository.findByUserId(userId)
+        const avatarRecord = await this.avatarDataSource.findAvatarByUserId(userId)
         // Exist
         if (avatarRecord && avatarRecord.hashedName) {
             const avatarFileExist = await this.diskStorageAvatar.checkAvatarFileExists(avatarRecord.hashedName)
@@ -36,7 +36,7 @@ export class GetUserAvatarUsecase {
         }
         const hashedName = await this.hashService.generateHashForName(userId, 10)
         await this.externalApiService.downloadAndSaveAvatar(user.avatar, hashedName)
-        await this.avatarRepository.insertAvatar({ userId, hashedName })
+        await this.avatarDataSource.insertAvatar({ userId, hashedName })
 
         return this._sendAvatar(hashedName)
     }
