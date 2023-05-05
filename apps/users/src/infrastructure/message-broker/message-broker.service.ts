@@ -9,10 +9,10 @@ import { firstValueFrom } from 'rxjs'
 @Injectable()
 export class MessageBrokerService implements IMessageBrokerService {
     constructor(
-        @Inject(RMQ_SERVICES.MAILER) private readonly mailerClient: ClientProxy
+        @Inject(RMQ_SERVICES.USERS) private readonly mailerClient: ClientProxy
     ) { }
 
-    emitUserCreatedEventToMailer(newUser: UserM): Promise<any> {
+    emitUserCreatedEvent(newUser: UserM): Promise<any> {
         return firstValueFrom(this.mailerClient.emit(RMQ_MESSAGES.NEW_USER_CREATED, newUser))
     }
 

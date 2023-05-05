@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix(GLOBAL_API_PREFIX)
   const environmentService = app.get<EnvironmentService>(EnvironmentService)
-  app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.MAILER))
+  app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS))
   app.useGlobalFilters(new GlobalExceptionFilter());
   await app.startAllMicroservices()
   app.listen(environmentService.getAppPort())

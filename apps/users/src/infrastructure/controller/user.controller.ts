@@ -37,7 +37,7 @@ export class UserController {
     @Post('users')
     async createUser(@Payload() createUser: CreateUserDto) {
         // try {
-        const createdUser = await this.postUserUsecase.getInstance().addUser(createUser as any)
+        const createdUser = await this.postUserUsecase.getInstance().createUser(createUser as any)
         return createdUser
 
         // } catch (error) {
@@ -74,6 +74,6 @@ export class UserController {
 
     @Get('test/:userId')
     async test(@Param('userId', ParseIntPipe) userId: number) {
-        return this.messageBroker.emitUserCreatedEventToMailer({ userId: 1 } as any)
+        return this.messageBroker.emitUserCreatedEvent({ userId: 1 } as any)
     }
 }
