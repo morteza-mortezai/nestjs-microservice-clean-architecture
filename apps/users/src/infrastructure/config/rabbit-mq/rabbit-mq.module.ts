@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RMQ_SERVICES } from '@app/common/constants/rmq.constant';
 import { ClientsModule, Transport, ClientProxyFactory } from '@nestjs/microservices';
-import { EnvironmentService } from '../config/environment/environment.service';
+import { EnvironmentService } from '../environment/environment.service';
 
 @Module({
 
@@ -10,7 +10,7 @@ import { EnvironmentService } from '../config/environment/environment.service';
         {
             provide: RMQ_SERVICES.USERS,
             useFactory: (environmentService: EnvironmentService) => {
-                const rabbitMQOptions = environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS);
+                const rabbitMQOptions = environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS, true);
                 return ClientProxyFactory.create(rabbitMQOptions);
             },
             inject: [EnvironmentService],
