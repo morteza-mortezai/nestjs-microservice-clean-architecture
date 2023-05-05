@@ -8,9 +8,6 @@ import { ClientOptions, Transport } from '@nestjs/microservices';
 @Injectable()
 export class EnvironmentService implements RmqConfig, AppConfig, HttpConfig {
     constructor(private configService: ConfigService) { }
-    // onModuleInit() {
-    //     console.log(`----`, this.configService.get<string>('DB_HOST'));
-    // }
 
     private _getRmqUri(): string {
         return this.configService.get<string>('RMQ_URI');
