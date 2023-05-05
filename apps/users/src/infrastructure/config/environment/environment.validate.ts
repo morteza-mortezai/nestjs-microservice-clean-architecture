@@ -9,4 +9,5 @@ export const validationSchema = Joi.object({
     HTTP_TIMEOUT: Joi.number().required(),
     HTTP_MAX_REDIRECTS: Joi.number().required(),
     MONGODB_URI: Joi.string().required(),
+    MAILER_TRANSPORT: Joi.string().required(),
 })

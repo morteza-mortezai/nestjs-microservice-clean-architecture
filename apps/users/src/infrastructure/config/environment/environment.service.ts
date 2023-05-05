@@ -49,4 +49,7 @@ export class EnvironmentService implements RmqConfig, AppConfig, HttpConfig {
         return clientOptions
     }
 
+    getMailerTransport(): string {
+        return this.configService.get<string>('MAILER_TRANSPORT');
+    }
 }

@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { EnvironmentService } from './environment.service';
 import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from './environment.validate'
-
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({

@@ -1,6 +1,4 @@
 import { IExceptionService } from "../domain/exceptions/exception-service.interface";
-import { UserM } from "../domain/model/user";
-import { UserRepository } from "../domain/repository/userRepository.interface";
 import { IExternallApiService } from "../domain/external-api/externall-api.interface";
 import { IAvatarDataSource } from "../domain/repository/avatarDataSource.interface";
 import { IHashService } from "../domain/hash-service/hash-service.interface";

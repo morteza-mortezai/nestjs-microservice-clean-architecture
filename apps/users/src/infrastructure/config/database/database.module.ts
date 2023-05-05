@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EnvironmentModule } from '../environment/environment.module';
 import { TypeOrmConfigService } from './database.config';
 
 @Module({
     imports: [
-        EnvironmentModule,
+
         // TypeOrmModule.forRootAsync({
         //     imports: [EnvironmentModule],
         //     useFactory: (environment: EnvironmentService) => ({
@@ -23,7 +22,6 @@ import { TypeOrmConfigService } from './database.config';
         // }),
         TypeOrmModule.forRootAsync({
             useClass: TypeOrmConfigService,
-            imports: [EnvironmentModule]
         })
     ],
     providers: [TypeOrmConfigService]
