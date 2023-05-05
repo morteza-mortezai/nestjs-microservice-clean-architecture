@@ -5,6 +5,7 @@ import { RMQ_SERVICES } from '@app/common/constants/rmq.constant';
 import { EnvironmentService } from './infrastructure/config/environment/environment.service';
 import { GLOBAL_API_PREFIX } from './infrastructure/config/constants/app.constant';
 import { GlobalExceptionFilter } from '@app/common/filter/exception.filter';
+import { MicroserviceExceptionFilter } from '@app/common/filter/rpc-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,7 @@ async function bootstrap() {
   const environmentService = app.get<EnvironmentService>(EnvironmentService)
   app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS))
   app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalFilters(new MicroserviceExceptionFilter());
   await app.startAllMicroservices()
   app.listen(environmentService.getAppPort())
 

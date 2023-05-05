@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 
-import { EnvironmentService } from '../../infrastructure/config/environment/environment.service';
+import { EnvironmentService } from '../config/environment/environment.service';
 import { NodeMailerService } from './node-mailer.service';
 
 @Module({

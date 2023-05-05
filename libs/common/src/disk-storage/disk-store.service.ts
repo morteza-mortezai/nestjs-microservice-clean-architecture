@@ -28,9 +28,9 @@ export class DiskStorageService {
     }
 
     async deleteFile(filePath: string): Promise<void> {
-        // const fileExist = await this.checkFileExists(filePath)
-        // if (fileExist) {
-        return fsp.unlink(filePath)
-        // }
+        const fileExist = await this.checkFileExists(filePath)
+        if (fileExist) {
+            return fsp.unlink(filePath)
+        }
     }
 }
