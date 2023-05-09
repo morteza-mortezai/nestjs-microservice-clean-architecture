@@ -15,7 +15,7 @@ export class EnvironmentService implements RmqConfig {
         return this.configService.get<string>(`RMQ_${name}_QUEUE`);
     }
 
-    getRabbitMQOptions(name: string, noAck = true): ClientOptions {
+    getRabbitMQOptions(name: string, noAck = false): ClientOptions {
         const clientOptions: ClientOptions = {
             transport: Transport.RMQ,
             options: {
