@@ -1,5 +1,5 @@
 export enum RMQ_SERVICES {
-    USERS = 'USERS',
+    MAILER = 'MAILER',
 }
 export enum RMQ_MESSAGES {
     NEW_USER_CREATED = 'NEW_USER_CREATED'

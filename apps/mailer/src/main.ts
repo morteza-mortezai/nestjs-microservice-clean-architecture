@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(MailerModule);
   app.useGlobalPipes(new ValidationPipe());
   const environmentService = app.get<EnvironmentService>(EnvironmentService)
-  const microservice = app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS))
+  const microservice = app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.MAILER))
   await app.startAllMicroservices()
   await app.listen(3002)
 

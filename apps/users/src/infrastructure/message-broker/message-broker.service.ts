@@ -9,7 +9,7 @@ import { firstValueFrom } from 'rxjs'
 @Injectable()
 export class MessageBrokerService implements IMessageBrokerService {
     constructor(
-        @Inject(RMQ_SERVICES.USERS) private readonly mailerClient: ClientProxy
+        @Inject(RMQ_SERVICES.MAILER) private readonly mailerClient: ClientProxy
     ) { }
 
     emitUserCreatedEvent(newUser: UserM): Promise<any> {
