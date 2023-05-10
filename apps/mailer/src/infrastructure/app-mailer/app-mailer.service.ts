@@ -1,21 +1,21 @@
-// import { Injectable, Inject } from '@nestjs/common';
-// import { IAppMailer } from '../../domain/app-mailer/app-mailer.abstract';
-// import { UserM } from '../../domain/model/user';
-// import { APP_MAILER } from '../config/constants/app-mailer.constant';
-// import { NodeMailerService } from '../node-mailer/node-mailer.service';
+import { Injectable, Inject } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
+import { IEmail } from '../../domain/interface/email.interface';
+import { IAppMailer } from '../../domain/abstracts/app-mailer.abstract';
 
+@Injectable()
+export class AppMailerService implements IAppMailer {
+    constructor(private readonly mailerService: MailerService) { }
 
-// @Injectable()
-// export class AppMailerService implements IAppMailer {
-//     constructor(private readonly nodeMailerService: NodeMailerService) { }
-
-//     async sendConfirmEmail(user: UserM): Promise<boolean> {
-//         return this.nodeMailerService
-//             .sendEmail({
-//                 to: user.email,
-//                 from: APP_MAILER.FROM,
-//                 subject: APP_MAILER.CONFIRM_SUBJECT,
-//                 text: APP_MAILER.CONFIRM_TEXT,
-//             })
-//     }
-// }
+    async sendMail({ email, from, subject, text }: IEmail): Promise<any> {
+        return this.mailerService
+            .sendMail({
+                to: email,
+                from,
+                subject,
+                text,
+            })
+        // .then(() => { return true })
+        // .catch(() => { return false });
+    }
+}
