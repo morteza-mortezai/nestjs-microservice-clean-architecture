@@ -16,11 +16,10 @@ import { DiskStorageAvatarModule } from '../disk-storage-avatar/disk-storage-ava
 import { DiskStorageAvatarService } from '../disk-storage-avatar/disk-storage-avatar.service';
 import { MessageBrokerService } from '../message-broker/message-broker.service';
 import { MessageBrokerModule } from '../message-broker/message-broker.module';
-import { AppMailerModule } from '../app-mailer/app-mailer.module';
-import { AppMailerService } from '../app-mailer/app-mailer.service';
+
 @Module({
     imports: [
-        DataSourceModule, ExceptionsModule, ExternallApiModule, HashModule, DiskStorageAvatarModule, MessageBrokerModule, AppMailerModule
+        DataSourceModule, ExceptionsModule, ExternallApiModule, HashModule, DiskStorageAvatarModule, MessageBrokerModule
     ]
 })
 export class UsecaseProxyModule {
@@ -33,9 +32,9 @@ export class UsecaseProxyModule {
             module: UsecaseProxyModule,
             providers: [
                 {
-                    inject: [UserDataSource, ExceptionsService, MessageBrokerService, AppMailerService],
+                    inject: [UserDataSource, ExceptionsService, MessageBrokerService],
                     provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
-                    useFactory: (UserDataSource: UserDataSource, exceptionsService: ExceptionsService, messageBrokerService: MessageBrokerService, appMailerService: AppMailerService) => new UsecaseProxy(new createUserUsecase(UserDataSource, exceptionsService, messageBrokerService, appMailerService))
+                    useFactory: (UserDataSource: UserDataSource, exceptionsService: ExceptionsService, messageBrokerService: MessageBrokerService) => new UsecaseProxy(new createUserUsecase(UserDataSource, exceptionsService, messageBrokerService))
                 },
                 {
                     inject: [ExternallApiService, ExceptionsService],

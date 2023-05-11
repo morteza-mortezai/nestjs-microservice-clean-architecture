@@ -14,7 +14,7 @@ export class ConfirmMailUsecase {
             subject: 'Please Confirm Your Email Address',
             text: 'Confirmation Text and Link'
         }
-        await this.appMailer.sendMail(econfirmMail)
-        return { success: true }
+        const result = await this.appMailer.sendMail(econfirmMail)
+        return result
     }
 }
