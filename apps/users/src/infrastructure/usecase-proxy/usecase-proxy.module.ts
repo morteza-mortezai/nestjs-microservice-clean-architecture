@@ -1,6 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { DataSourceModule } from '../data-source/data-source.module';
-import { createUserUsecase } from '../../usecase/createUser.usecase'
+import { CreateUserUsecase } from '../../usecase/createUser.usecase'
 import { UserDataSource } from '../data-source/user.data-source'
 import { UsecaseProxy } from './usecase-proxy'
 import { ExceptionsService } from '../../../../../libs/common/src/exceptions/exceptions.service';
@@ -34,7 +34,7 @@ export class UsecaseProxyModule {
                 {
                     inject: [UserDataSource, ExceptionsService, MessageBrokerService],
                     provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
-                    useFactory: (UserDataSource: UserDataSource, exceptionsService: ExceptionsService, messageBrokerService: MessageBrokerService) => new UsecaseProxy(new createUserUsecase(UserDataSource, exceptionsService, messageBrokerService))
+                    useFactory: (UserDataSource: UserDataSource, exceptionsService: ExceptionsService, messageBrokerService: MessageBrokerService) => new UsecaseProxy(new CreateUserUsecase(UserDataSource, exceptionsService, messageBrokerService))
                 },
                 {
                     inject: [ExternallApiService, ExceptionsService],

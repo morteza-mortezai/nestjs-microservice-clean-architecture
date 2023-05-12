@@ -1,37 +1,26 @@
-import { Controller, Post, Get, Body, Inject, HttpException, HttpStatus, ParseIntPipe, Param, Delete } from '@nestjs/common';
-import { MessagePattern, Payload, RmqContext, Ctx } from '@nestjs/microservices'
+import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete } from '@nestjs/common';
+import { Payload } from '@nestjs/microservices'
 import { CreateUserDto } from '../dto/createUser.dto';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
 import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
-import { createUserUsecase } from '../../usecase/createUser.usecase'
+import { CreateUserUsecase } from '../../usecase/createUser.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
-import { RMQ_MESSAGES } from '@app/common/constants/rmq.constant';
-import { HttpService } from '@nestjs/axios';
-const fs = require('fs');
-import * as stream from 'stream';
-import { promisify } from 'util';
-import { AvatarDataSource } from '../data-source/avatar.data-source';
-import { MessageBrokerService } from '../message-broker/message-broker.service';
-// import { DiskStoreService } from '../disk-store/disk-store.service';
-const finished = promisify(stream.finished);
 
 
 @Controller()
 export class UserController {
     constructor(
         @Inject(UsecaseProxyModule.POST_USER_USECASES_PROXY)
-        private readonly postUserUsecase: UsecaseProxy<createUserUsecase>,
+        private readonly postUserUsecase: UsecaseProxy<CreateUserUsecase>,
         @Inject(UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY)
         private readonly getUserUsecaseProxy: UsecaseProxy<GetUserFromApiUsecase>,
         @Inject(UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY)
         private readonly getAvatarUsecaseProxy: UsecaseProxy<GetUserAvatarUsecase>,
         @Inject(UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY)
         private readonly deleteAvatarUsecase: UsecaseProxy<DeleteAvatarUsecase>,
-        private readonly messageBroker: MessageBrokerService
 
-        // private readonly disk: DiskStoreService,
     ) { }
     // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
     @Post('users')
@@ -39,11 +28,6 @@ export class UserController {
         // try {
         const createdUser = await this.postUserUsecase.getInstance().createUser(createUser as any)
         return createdUser
-
-        // } catch (error) {
-        //     console.log('ee', error)
-        //     return error
-        // }
     }
 
     @Get('user/:userId')
@@ -72,8 +56,4 @@ export class UserController {
         return this.deleteAvatarUsecase.getInstance().deleteAvatar(userId)
     }
 
-    @Get('test/:userId')
-    async test(@Param('userId', ParseIntPipe) userId: number) {
-        return this.messageBroker.emitUserCreatedEvent({ userId: 1 } as any)
-    }
 }

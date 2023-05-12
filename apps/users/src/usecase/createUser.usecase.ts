@@ -4,7 +4,7 @@ import { IMessageBrokerService } from "../domain/message-broker/message-broker.i
 import { UserM } from "../domain/model/user";
 import { IUserDataSource } from "../domain/repository/userDataSource.interface";
 
-export class createUserUsecase {
+export class CreateUserUsecase {
     constructor(
         private readonly userDataSource: IUserDataSource,
         private readonly exceptionService: IExceptionService,
