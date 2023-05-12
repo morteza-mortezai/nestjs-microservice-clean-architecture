@@ -1,15 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UserDataSource } from '../infrastructure/data-source/user.data-source';
-import { GenericRepository } from '@app/common';
-import { UserM } from '../domain/model/user';
-import { User } from '../infrastructure/entity/user.entity';
-import { Repository, EntityManager, DataSource } from 'typeorm'
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { CreateUserUsecase } from './createUser.usecase';
 import { IUserDataSource } from '../domain/repository/userDataSource.interface';
 import { IExceptionService } from '../domain/exceptions/exception-service.interface';
 import { IMessageBrokerService } from '../domain/message-broker/message-broker.interface';
-import { ExceptionsService } from '@app/common/exceptions/exceptions.service';
 
 describe('Create User Usecase', () => {
     let userDataSource: IUserDataSource
