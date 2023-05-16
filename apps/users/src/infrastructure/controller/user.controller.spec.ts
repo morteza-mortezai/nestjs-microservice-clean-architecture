@@ -1,18 +1,77 @@
-// import { Test, TestingModule } from '@nestjs/testing';
-// import { Controller } from './.controller';
+import { Test, TestingModule } from '@nestjs/testing';
+import { UserController } from './user.controller';
+import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
+import { UsecaseProxy } from '../usecase-proxy/usecase-proxy';
+import { CreateUserUsecase } from '../../usecase/createUser.usecase';
+import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase';
+import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase';
+import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase';
+import { ControllerModule } from './controller.module'
+import { INestApplication } from '@nestjs/common';
+import { AppModule } from '../../app.module'
+describe('User Controller', () => {
+    let app: INestApplication;
 
-// describe('Controller', () => {
-//   let controller: Controller;
+    let userController: UserController;
 
-//   beforeEach(async () => {
-//     const module: TestingModule = await Test.createTestingModule({
-//       controllers: [Controller],
-//     }).compile();
+    let postUserUsecase: CreateUserUsecase
+    let getUserFromApiUsecase: GetUserFromApiUsecase
+    let getUserAvatarUsecase: GetUserAvatarUsecase
+    let deleteAvatarUsecase: DeleteAvatarUsecase
+    // isolated test must be done
+    beforeAll(async () => {
+        postUserUsecase = {} as CreateUserUsecase
+        postUserUsecase.createUser = jest.fn()
 
-//     controller = module.get<Controller>(Controller);
-//   });
+        const postUserUsecaseProxyService: UsecaseProxy<CreateUserUsecase> = {
+            getInstance: () => postUserUsecase
+        } as UsecaseProxy<CreateUserUsecase>;
 
-//   it('should be defined', () => {
-//     expect(controller).toBeDefined();
-//   });
-// });
+        const getUserFromApiUsecaseProxyService: UsecaseProxy<GetUserFromApiUsecase> = {
+            getInstance: () => getUserFromApiUsecase
+        } as UsecaseProxy<GetUserFromApiUsecase>;
+
+        const getUserAvatarUsecaseProxyService: UsecaseProxy<GetUserAvatarUsecase> = {
+            getInstance: () => getUserAvatarUsecase
+        } as UsecaseProxy<GetUserAvatarUsecase>;
+
+        const deleteAvatarUsecaseProxyService: UsecaseProxy<DeleteAvatarUsecase> = {
+            getInstance: () => deleteAvatarUsecase
+        } as UsecaseProxy<DeleteAvatarUsecase>;
+
+        const moduleRef = await Test.createTestingModule({
+            imports: [AppModule],
+        })
+            .overrideProvider(UsecaseProxyModule.POST_USER_USECASES_PROXY)
+            .useValue(postUserUsecaseProxyService)
+            .overrideProvider(UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY)
+            .useValue(getUserFromApiUsecaseProxyService)
+            .overrideProvider(UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY)
+            .useValue(getUserAvatarUsecaseProxyService)
+            .overrideProvider(UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY)
+            .useValue(deleteAvatarUsecaseProxyService)
+            .compile()
+
+        app = moduleRef.createNestApplication();
+        await app.init();
+
+        userController = moduleRef.get<UserController>(UserController)
+    });
+    it('should be defined', async () => {
+        expect(userController).toBeDefined
+    });
+    it('should return created user', async () => {
+        const userDto = {
+            email: 'a@a.com',
+            first_name: 'ali',
+            last_name: 'alavi',
+            password: '123',
+            avatar: 'av'
+        }
+        postUserUsecase.createUser = jest.fn(() => Promise.resolve(userDto))
+        expect(await userController.createUser(userDto)).toEqual(userDto)
+    });
+    afterAll(async () => {
+        await app.close();
+    });
+});
