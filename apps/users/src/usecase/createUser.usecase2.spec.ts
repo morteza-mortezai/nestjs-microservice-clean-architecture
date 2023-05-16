@@ -1,4 +1,4 @@
-import { Test } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { UsecaseProxyModule } from '../infrastructure/usecase-proxy/usecase-proxy.module';
 import { CreateUserUsecase } from '../usecase/createUser.usecase';
 import { ConflictException, INestApplication } from '@nestjs/common';
@@ -26,7 +26,7 @@ describe('User Controller', () => {
         messageBroker = {} as IMessageBrokerService
         messageBroker.emitUserCreatedEvent = jest.fn().mockResolvedValue(() => null)
 
-        const moduleRef = await Test.createTestingModule({
+        const moduleRef: TestingModule = await Test.createTestingModule({
             providers: [
                 {
                     provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
@@ -44,7 +44,11 @@ describe('User Controller', () => {
         expect(createUserUsecase.createUser).toBeDefined
     });
     it('return created user', async () => {
-        expect(await createUserUsecase.createUser(userDto)).toEqual(userDto)
+        const res = await createUserUsecase.createUser(userDto)
+        expect(res).toEqual(userDto)
+        expect(userDataSource.findByEmail).toHaveBeenCalled()
+        expect(userDataSource.insert).toHaveBeenCalled()
+        expect(messageBroker.emitUserCreatedEvent).toHaveBeenCalled()
     });
     it('return error', async () => {
         jest.spyOn(userDataSource, 'findByEmail').mockImplementation(() => Promise.resolve(userDto))

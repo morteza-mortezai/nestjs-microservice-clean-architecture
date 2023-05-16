@@ -40,16 +40,26 @@ describe('User Controller', () => {
         } as UsecaseProxy<DeleteAvatarUsecase>;
 
         const moduleRef = await Test.createTestingModule({
-            imports: [AppModule],
+            controllers: [UserController],
+            providers: [
+                {
+                    provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
+                    useValue: postUserUsecaseProxyService
+                },
+                {
+                    provide: UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY,
+                    useValue: getUserFromApiUsecaseProxyService
+                },
+                {
+                    provide: UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY,
+                    useValue: getUserAvatarUsecaseProxyService
+                },
+                {
+                    provide: UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY,
+                    useValue: deleteAvatarUsecaseProxyService
+                },
+            ]
         })
-            .overrideProvider(UsecaseProxyModule.POST_USER_USECASES_PROXY)
-            .useValue(postUserUsecaseProxyService)
-            .overrideProvider(UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY)
-            .useValue(getUserFromApiUsecaseProxyService)
-            .overrideProvider(UsecaseProxyModule.Get_USER_AVATAR_USECASES_PROXY)
-            .useValue(getUserAvatarUsecaseProxyService)
-            .overrideProvider(UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY)
-            .useValue(deleteAvatarUsecaseProxyService)
             .compile()
 
         app = moduleRef.createNestApplication();
@@ -58,7 +68,7 @@ describe('User Controller', () => {
         userController = moduleRef.get<UserController>(UserController)
     });
     it('should be defined', async () => {
-        expect(userController).toBeDefined
+        expect(userController.createUser).toBeDefined
     });
     it('should return created user', async () => {
         const userDto = {
@@ -69,7 +79,7 @@ describe('User Controller', () => {
             avatar: 'av'
         }
         postUserUsecase.createUser = jest.fn(() => Promise.resolve(userDto))
-        expect(await userController.createUser(userDto)).toEqual(userDto)
+        expect(userController.createUser(userDto)).resolves.toEqual(userDto)
     });
     afterAll(async () => {
         await app.close();
