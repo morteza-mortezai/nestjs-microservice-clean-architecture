@@ -6,7 +6,7 @@ import { CreateUserUsecase } from '../usecase/createUser.usecase';
 import { GetUserFromApiUsecase } from '../usecase/getUserFromApi.usecase';
 import { GetUserAvatarUsecase } from '../usecase/getUserAvatar.usecase';
 import { DeleteAvatarUsecase } from '../usecase/delete-avatar.usecase';
-import { INestApplication } from '@nestjs/common';
+import { ConflictException, INestApplication } from '@nestjs/common';
 import { AppModule } from '../app.module'
 import { IUserDataSource } from '../domain/repository/userDataSource.interface';
 import { IExceptionService } from '../domain/exceptions/exception-service.interface';
@@ -41,7 +41,9 @@ describe('User Controller', () => {
             insert: jest.fn(() => Promise.resolve(userDto))
         }
         exceptionService = {} as IExceptionService
+        // exceptionService.conflictException=jest.fn().mockResolvedValue(()=>throw)
         messageBroker = {} as IMessageBrokerService
+        messageBroker.emitUserCreatedEvent = jest.fn().mockResolvedValue(() => true)
         // const postUserUsecaseProxyService: UsecaseProxy<CreateUserUsecase> = {
         //     getInstance: () => postUserUsecase
         // } as UsecaseProxy<CreateUserUsecase>;
@@ -62,7 +64,7 @@ describe('User Controller', () => {
             providers: [
                 {
                     provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
-                    useValue: new CreateUserUsecase(userDataSource, exceptionService, messageBroker)
+                    useValue: new CreateUserUsecase(userDataSource, new ExceptionsService(), messageBroker)
                 }
             ]
         })
@@ -79,8 +81,11 @@ describe('User Controller', () => {
         expect(createUserUsecase.createUser).toBeDefined
     });
     it('return created user', async () => {
-
         expect(await createUserUsecase.createUser(userDto)).toEqual(userDto)
+    });
+    it('return Conflict error', async () => {
+        jest.spyOn(userDataSource, 'findByEmail').mockImplementation(() => Promise.resolve(userDto))
+        expect(createUserUsecase.createUser(userDto)).rejects.toThrow(ConflictException)
     });
     // it('should return created user', async () => {
     //     const userDto = {
