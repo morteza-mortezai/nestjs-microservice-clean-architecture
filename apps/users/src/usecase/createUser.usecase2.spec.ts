@@ -37,8 +37,8 @@ describe('User Controller', () => {
         // postUserUsecase = {} as CreateUserUsecase
         // postUserUsecase.createUser = jest.fn()
         userDataSource = {
-            findByEmail: jest.fn(() => Promise.resolve(userDto)),
-            insert: jest.fn()
+            findByEmail: jest.fn(() => Promise.resolve(null)),
+            insert: jest.fn(() => Promise.resolve(userDto))
         }
         exceptionService = {} as IExceptionService
         messageBroker = {} as IMessageBrokerService
