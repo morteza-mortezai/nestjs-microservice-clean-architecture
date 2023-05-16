@@ -1,31 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UserController } from '../infrastructure/controller/user.controller';
+import { Test } from '@nestjs/testing';
 import { UsecaseProxyModule } from '../infrastructure/usecase-proxy/usecase-proxy.module';
-import { UsecaseProxy } from '../infrastructure/usecase-proxy/usecase-proxy';
 import { CreateUserUsecase } from '../usecase/createUser.usecase';
-import { GetUserFromApiUsecase } from '../usecase/getUserFromApi.usecase';
-import { GetUserAvatarUsecase } from '../usecase/getUserAvatar.usecase';
-import { DeleteAvatarUsecase } from '../usecase/delete-avatar.usecase';
 import { ConflictException, INestApplication } from '@nestjs/common';
-import { AppModule } from '../app.module'
 import { IUserDataSource } from '../domain/repository/userDataSource.interface';
-import { IExceptionService } from '../domain/exceptions/exception-service.interface';
 import { IMessageBrokerService } from '../domain/message-broker/message-broker.interface';
-import { UserDataSource } from '../infrastructure/data-source/user.data-source';
 import { ExceptionsService } from '@app/common/exceptions/exceptions.service';
-import { MessageBrokerService } from '../infrastructure/message-broker/message-broker.service';
 describe('User Controller', () => {
     let app: INestApplication;
     let createUserUsecase: CreateUserUsecase
 
     let userDataSource: IUserDataSource
-    let exceptionService: IExceptionService
     let messageBroker: IMessageBrokerService
-    // let usecaseProxyModule: UsecaseProxyModule;
-    // let getUserFromApiUsecase: GetUserFromApiUsecase
-    // let getUserAvatarUsecase: GetUserAvatarUsecase
-    // let deleteAvatarUsecase: DeleteAvatarUsecase
-    // isolated test must be done
     const userDto = {
         email: 'a@a.com',
         first_name: 'ali',
@@ -34,31 +19,12 @@ describe('User Controller', () => {
         avatar: 'av'
     }
     beforeAll(async () => {
-        // postUserUsecase = {} as CreateUserUsecase
-        // postUserUsecase.createUser = jest.fn()
         userDataSource = {
             findByEmail: jest.fn(() => Promise.resolve(null)),
             insert: jest.fn(() => Promise.resolve(userDto))
         }
-        exceptionService = {} as IExceptionService
-        // exceptionService.conflictException=jest.fn().mockResolvedValue(()=>throw)
         messageBroker = {} as IMessageBrokerService
-        messageBroker.emitUserCreatedEvent = jest.fn().mockResolvedValue(() => true)
-        // const postUserUsecaseProxyService: UsecaseProxy<CreateUserUsecase> = {
-        //     getInstance: () => postUserUsecase
-        // } as UsecaseProxy<CreateUserUsecase>;
-
-        // const getUserFromApiUsecaseProxyService: UsecaseProxy<GetUserFromApiUsecase> = {
-        //     getInstance: () => getUserFromApiUsecase
-        // } as UsecaseProxy<GetUserFromApiUsecase>;
-
-        // const getUserAvatarUsecaseProxyService: UsecaseProxy<GetUserAvatarUsecase> = {
-        //     getInstance: () => getUserAvatarUsecase
-        // } as UsecaseProxy<GetUserAvatarUsecase>;
-
-        // const deleteAvatarUsecaseProxyService: UsecaseProxy<DeleteAvatarUsecase> = {
-        //     getInstance: () => deleteAvatarUsecase
-        // } as UsecaseProxy<DeleteAvatarUsecase>;
+        messageBroker.emitUserCreatedEvent = jest.fn().mockResolvedValue(() => null)
 
         const moduleRef = await Test.createTestingModule({
             providers: [
@@ -67,10 +33,7 @@ describe('User Controller', () => {
                     useValue: new CreateUserUsecase(userDataSource, new ExceptionsService(), messageBroker)
                 }
             ]
-        })
-            // .overrideProvider(userDataSource)
-            // .useValue(userDataSource)
-            .compile()
+        }).compile()
 
         app = moduleRef.createNestApplication();
         await app.init();
@@ -83,21 +46,10 @@ describe('User Controller', () => {
     it('return created user', async () => {
         expect(await createUserUsecase.createUser(userDto)).toEqual(userDto)
     });
-    it('return Conflict error', async () => {
+    it('return error', async () => {
         jest.spyOn(userDataSource, 'findByEmail').mockImplementation(() => Promise.resolve(userDto))
         expect(createUserUsecase.createUser(userDto)).rejects.toThrow(ConflictException)
     });
-    // it('should return created user', async () => {
-    //     const userDto = {
-    //         email: 'a@a.com',
-    //         first_name: 'ali',
-    //         last_name: 'alavi',
-    //         password: '123',
-    //         avatar: 'av'
-    //     }
-    //     postUserUsecase.createUser = jest.fn(() => Promise.resolve(userDto))
-    //     expect(await userController.createUser(userDto)).toEqual(userDto)
-    // });
     afterAll(async () => {
         await app.close();
     });
