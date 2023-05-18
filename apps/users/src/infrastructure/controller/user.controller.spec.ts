@@ -6,22 +6,21 @@ import { CreateUserUsecase } from '../../usecase/createUser.usecase';
 import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase';
 import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase';
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase';
-import { ControllerModule } from './controller.module'
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from '../../app.module'
+
 describe('User Controller', () => {
     let app: INestApplication;
-
     let userController: UserController;
-
     let postUserUsecase: CreateUserUsecase
     let getUserFromApiUsecase: GetUserFromApiUsecase
     let getUserAvatarUsecase: GetUserAvatarUsecase
     let deleteAvatarUsecase: DeleteAvatarUsecase
-    // isolated test must be done
+
     beforeAll(async () => {
         postUserUsecase = {} as CreateUserUsecase
-        postUserUsecase.createUser = jest.fn()
+        getUserFromApiUsecase = {} as GetUserFromApiUsecase
+        getUserAvatarUsecase = {} as GetUserAvatarUsecase
+        deleteAvatarUsecase = {} as DeleteAvatarUsecase
 
         const postUserUsecaseProxyService: UsecaseProxy<CreateUserUsecase> = {
             getInstance: () => postUserUsecase
@@ -39,7 +38,7 @@ describe('User Controller', () => {
             getInstance: () => deleteAvatarUsecase
         } as UsecaseProxy<DeleteAvatarUsecase>;
 
-        const moduleRef = await Test.createTestingModule({
+        const moduleRef: TestingModule = await Test.createTestingModule({
             controllers: [UserController],
             providers: [
                 {
@@ -59,28 +58,67 @@ describe('User Controller', () => {
                     useValue: deleteAvatarUsecaseProxyService
                 },
             ]
-        })
-            .compile()
+        }).compile()
 
         app = moduleRef.createNestApplication();
         await app.init();
 
         userController = moduleRef.get<UserController>(UserController)
     });
-    it('should be defined', async () => {
-        expect(userController.createUser).toBeDefined
-    });
-    it('should return created user', async () => {
-        const userDto = {
-            email: 'a@a.com',
-            first_name: 'ali',
-            last_name: 'alavi',
-            password: '123',
-            avatar: 'av'
-        }
-        postUserUsecase.createUser = jest.fn(() => Promise.resolve(userDto))
-        expect(userController.createUser(userDto)).resolves.toEqual(userDto)
-    });
+    describe('create user', () => {
+        it('should be defined', async () => {
+            expect(userController.createUser).toBeDefined
+        });
+        it('should return created user', async () => {
+            const userDto = {
+                email: 'a@a.com',
+                first_name: 'ali',
+                last_name: 'alavi',
+                password: '123',
+                avatar: 'av'
+            }
+            postUserUsecase.createUser = jest.fn().mockResolvedValue(userDto)
+            expect(userController.createUser(userDto)).resolves.toEqual(userDto)
+        });
+    })
+    describe('get user by Id', () => {
+        it('should be defined', async () => {
+            expect(userController.getUserById).toBeDefined
+        });
+        it('should user', async () => {
+            const userfromApi = {
+                email: 'a@a.com',
+                first_name: 'ali',
+                last_name: 'alavi',
+                password: '123',
+                avatar: 'av'
+            }
+            getUserFromApiUsecase.getUserFromApi = jest.fn().mockResolvedValue(userfromApi)
+            expect(userController.getUserById(1)).resolves.toEqual(userfromApi)
+        });
+
+    })
+    describe('get user avatar by Id', () => {
+        it('should be defined', async () => {
+            expect(userController.getAvatarByUserId).toBeDefined
+        });
+        it('should return user avatar', async () => {
+            const avatarBase64 = 'some base64 string'
+            getUserAvatarUsecase.getAvatar = jest.fn().mockResolvedValue(avatarBase64)
+            expect(userController.getAvatarByUserId(1)).resolves.toEqual(avatarBase64)
+        });
+
+    })
+    describe('delete user avatar by Id', () => {
+        it('should be defined', async () => {
+            expect(userController.getAvatarByUserId).toBeDefined
+        });
+        it('delete user avatar', async () => {
+            const result = { message: 'avatar deleted successfully' }
+            deleteAvatarUsecase.deleteAvatar = jest.fn().mockResolvedValue(result)
+            expect(userController.deleteAvatar(1)).resolves.toEqual(result)
+        });
+    })
     afterAll(async () => {
         await app.close();
     });
