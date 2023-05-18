@@ -37,9 +37,9 @@ export class UsecaseProxyModule {
                     useFactory: (UserDataSource: UserDataSource, exceptionsService: ExceptionsService, messageBrokerService: MessageBrokerService) => new UsecaseProxy(new CreateUserUsecase(UserDataSource, exceptionsService, messageBrokerService))
                 },
                 {
-                    inject: [ExternallApiService, ExceptionsService],
+                    inject: [ExternallApiService],
                     provide: UsecaseProxyModule.Get_USER_FROM_API_USECASES_PROXY,
-                    useFactory: (externalApiService: ExternallApiService, exceptionsService: ExceptionsService) => new UsecaseProxy(new GetUserFromApiUsecase(externalApiService, exceptionsService))
+                    useFactory: (externalApiService: ExternallApiService) => new UsecaseProxy(new GetUserFromApiUsecase(externalApiService))
                 },
                 {
                     inject: [AvatarDataSource, ExternallApiService, ExceptionsService, HashService, DiskStorageAvatarService],

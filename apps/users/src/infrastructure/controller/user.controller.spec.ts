@@ -87,11 +87,11 @@ describe('User Controller', () => {
         });
         it('should user', async () => {
             const userfromApi = {
-                email: 'a@a.com',
-                first_name: 'ali',
-                last_name: 'alavi',
-                password: '123',
-                avatar: 'av'
+                id: 1,
+                email: 'george.bluth@reqres.in',
+                first_name: 'George',
+                last_name: 'Bluth',
+                avatar: 'https://reqres.in/img/faces/1-image.jpg'
             }
             getUserFromApiUsecase.getUserFromApi = jest.fn().mockResolvedValue(userfromApi)
             expect(userController.getUserById(1)).resolves.toEqual(userfromApi)
