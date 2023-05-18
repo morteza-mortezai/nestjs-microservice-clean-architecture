@@ -5,6 +5,6 @@ export const validationSchema = Joi.object({
         .valid('development', 'production', 'test', 'provision')
         .default('development'),
     APP_PORT: Joi.number().default(3000),
-    // RMQ_URI: Joi.string().required(),
-    // RMQ_USERS_QUEUE: Joi.string().required(),
+    RMQ_URI: Joi.string().required(),
+    RMQ_USERS_QUEUE: Joi.string().required(),
 })
