@@ -37,15 +37,6 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
-    "other-microservice": {
-      "type": "application",
-      "root": "apps/other-microservice",
-      "entryFile": "main",
-      "sourceRoot": "apps/other-microservice/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/other-microservice/tsconfig.app.json"
-      }
-    },
     "mailer": {
       "type": "application",
       "root": "apps/mailer",
