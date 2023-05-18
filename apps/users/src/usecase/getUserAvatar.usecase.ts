@@ -21,7 +21,7 @@ export class GetUserAvatarUsecase {
 
         // Search in db
         const avatarRecord = await this.avatarDataSource.findAvatarByUserId(userId)
-        // Exist
+        // Exists
         if (avatarRecord && avatarRecord.hashedName) {
             const avatarFileExist = await this.diskStorageAvatar.checkAvatarFileExists(avatarRecord.hashedName)
             if (avatarFileExist) return this._sendAvatar(avatarRecord.hashedName)
