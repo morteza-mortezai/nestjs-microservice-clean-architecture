@@ -1,5 +1,5 @@
 import { IExceptionService } from "../domain/exceptions/exception-service.interface";
-import { IAvatarDataSource } from "../domain/repository/avatarDataSource.interface";
+import { IAvatarDataSource } from "../domain/data-source/avatar-data-source.interface";
 import { IDiskStorageAvatar } from "../domain/disk-storage-avatar/disk-storage-avatar.interface";
 
 export class DeleteAvatarUsecase {

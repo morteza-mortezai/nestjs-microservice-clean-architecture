@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IAvatarDataSource } from '../../domain/repository/avatarDataSource.interface';
+import { IAvatarDataSource } from '../../domain/data-source/avatar-data-source.interface';
 import { AvatarM } from '../../domain/model/avatar';
 import { GenericRepository } from '@app/common';
 

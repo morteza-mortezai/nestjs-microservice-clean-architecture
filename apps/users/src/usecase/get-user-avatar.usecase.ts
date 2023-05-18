@@ -1,6 +1,6 @@
 import { IExceptionService } from "../domain/exceptions/exception-service.interface";
 import { IExternallApiService } from "../domain/external-api/externall-api.interface";
-import { IAvatarDataSource } from "../domain/repository/avatarDataSource.interface";
+import { IAvatarDataSource } from "../domain/data-source/avatar-data-source.interface";
 import { IHashService } from "../domain/hash-service/hash-service.interface";
 import { IDiskStorageAvatar } from "../domain/disk-storage-avatar/disk-storage-avatar.interface";
 

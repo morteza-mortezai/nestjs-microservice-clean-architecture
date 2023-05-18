@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
 import { UsecaseProxy } from '../usecase-proxy/usecase-proxy';
-import { CreateUserUsecase } from '../../usecase/createUser.usecase';
-import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase';
-import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase';
+import { CreateUserUsecase } from '../../usecase/create-user.usecase';
+import { GetUserFromApiUsecase } from '../../usecase/get-user-from-api.usecase';
+import { GetUserAvatarUsecase } from '../../usecase/get-user-avatar.usecase';
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase';
 import { INestApplication } from '@nestjs/common';
 

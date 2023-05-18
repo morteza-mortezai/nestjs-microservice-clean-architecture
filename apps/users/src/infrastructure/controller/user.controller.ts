@@ -1,6 +1,6 @@
 import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices'
-import { CreateUserDto } from '../dto/createUser.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
 
 
 
