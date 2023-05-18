@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { IUserDataSource } from '../../domain/repository/userDataSource.interface';
+import { IUserDataSource } from '../../domain/data-source/user-data-source.interface';
 import { UserM } from '../../domain/model/user';
 import { GenericRepository } from '@app/common';
 

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsecaseProxyModule } from '../infrastructure/usecase-proxy/usecase-proxy.module';
 import { INestApplication } from '@nestjs/common';
-import { GetUserFromApiUsecase } from './getUserFromApi.usecase';
+import { GetUserFromApiUsecase } from './get-user-from-api.usecase';
 import { IExternallApiService } from '../domain/external-api/externall-api.interface';
 describe('User Controller', () => {
     let app: INestApplication;

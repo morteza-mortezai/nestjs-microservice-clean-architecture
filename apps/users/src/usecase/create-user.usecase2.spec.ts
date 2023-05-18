@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsecaseProxyModule } from '../infrastructure/usecase-proxy/usecase-proxy.module';
-import { CreateUserUsecase } from '../usecase/createUser.usecase';
+import { CreateUserUsecase } from '../usecase/create-user.usecase';
 import { ConflictException, INestApplication } from '@nestjs/common';
-import { IUserDataSource } from '../domain/repository/userDataSource.interface';
+import { IUserDataSource } from '../domain/data-source/user-data-source.interface';
 import { IMessageBrokerService } from '../domain/message-broker/message-broker.interface';
 import { ExceptionsService } from '@app/common/exceptions/exceptions.service';
 describe('User Controller', () => {

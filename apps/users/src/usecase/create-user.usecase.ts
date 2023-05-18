@@ -2,7 +2,7 @@ import { IAppMailer } from "../domain/app-mailer/app-mailer.abstract";
 import { IExceptionService } from "../domain/exceptions/exception-service.interface";
 import { IMessageBrokerService } from "../domain/message-broker/message-broker.interface";
 import { UserM } from "../domain/model/user";
-import { IUserDataSource } from "../domain/repository/userDataSource.interface";
+import { IUserDataSource } from "../domain/data-source/user-data-source.interface";
 
 export class CreateUserUsecase {
     constructor(

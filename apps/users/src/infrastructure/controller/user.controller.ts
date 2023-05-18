@@ -1,11 +1,11 @@
 import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete } from '@nestjs/common';
 import { Payload } from '@nestjs/microservices'
-import { CreateUserDto } from '../dto/createUser.dto';
+import { CreateUserDto } from '../dto/create-user.dto';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
 import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
-import { CreateUserUsecase } from '../../usecase/createUser.usecase'
-import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
-import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
+import { CreateUserUsecase } from '../../usecase/create-user.usecase'
+import { GetUserFromApiUsecase } from '../../usecase/get-user-from-api.usecase'
+import { GetUserAvatarUsecase } from '../../usecase/get-user-avatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
 
 

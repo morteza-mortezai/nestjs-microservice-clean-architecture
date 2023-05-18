@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException } from '@nestjs/common';
-import { CreateUserUsecase } from './createUser.usecase';
-import { IUserDataSource } from '../domain/repository/userDataSource.interface';
+import { CreateUserUsecase } from './create-user.usecase';
+import { IUserDataSource } from '../domain/data-source/user-data-source.interface';
 import { IExceptionService } from '../domain/exceptions/exception-service.interface';
 import { IMessageBrokerService } from '../domain/message-broker/message-broker.interface';
 

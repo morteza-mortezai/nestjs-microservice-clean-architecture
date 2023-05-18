@@ -1,14 +1,14 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { DataSourceModule } from '../data-source/data-source.module';
-import { CreateUserUsecase } from '../../usecase/createUser.usecase'
+import { CreateUserUsecase } from '../../usecase/create-user.usecase'
 import { UserDataSource } from '../data-source/user.data-source'
 import { UsecaseProxy } from './usecase-proxy'
 import { ExceptionsService } from '../../../../../libs/common/src/exceptions/exceptions.service';
 import { ExceptionsModule } from '../../../../../libs/common/src/exceptions/exceptions.module';
 import { ExternallApiModule } from '../external-api/externall-api.module'
 import { ExternallApiService } from '../external-api/externall-api.service';
-import { GetUserFromApiUsecase } from '../../usecase/getUserFromApi.usecase'
-import { GetUserAvatarUsecase } from '../../usecase/getUserAvatar.usecase'
+import { GetUserFromApiUsecase } from '../../usecase/get-user-from-api.usecase'
+import { GetUserAvatarUsecase } from '../../usecase/get-user-avatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
 import { AvatarDataSource } from '../data-source/avatar.data-source';
 import { HashModule, HashService } from '@app/common';

@@ -1,4 +1,3 @@
-import { IExceptionService } from "../domain/exceptions/exception-service.interface";
 import { IExternallApiService } from "../domain/external-api/externall-api.interface";
 
 export class GetUserFromApiUsecase {
