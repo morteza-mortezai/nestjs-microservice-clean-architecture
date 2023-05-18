@@ -3,8 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 
-describe('User Controller', () => {
-    let app: INestApplication;
+describe('E2E Test', () => {
+    let app: INestApplication
 
     beforeAll(async () => {
         const moduleRef: TestingModule = await Test.createTestingModule({
@@ -13,6 +13,19 @@ describe('User Controller', () => {
             .compile()
         app = moduleRef.createNestApplication();
         await app.init();
+    });
+
+    it(`/GET cats`, () => {
+        return request.default(app.getHttpServer())
+            .post('/users')
+            .expect(400)
+        // .expect({
+        //     // data: catsService.findAll(),
+        // });
+    });
+    // request.default()
+    afterAll(async () => {
+        await app.close();
     });
 });
 // hello
