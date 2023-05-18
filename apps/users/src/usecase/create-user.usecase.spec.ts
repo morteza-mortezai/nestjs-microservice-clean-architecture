@@ -1,56 +1,60 @@
-import { BadRequestException, ConflictException } from '@nestjs/common';
-import { CreateUserUsecase } from './create-user.usecase';
+import { Test, TestingModule } from '@nestjs/testing';
+import { UsecaseProxyModule } from '../infrastructure/usecase-proxy/usecase-proxy.module';
+import { CreateUserUsecase } from '../usecase/create-user.usecase';
+import { ConflictException, INestApplication } from '@nestjs/common';
 import { IUserDataSource } from '../domain/data-source/user-data-source.interface';
-import { IExceptionService } from '../domain/exceptions/exception-service.interface';
 import { IMessageBrokerService } from '../domain/message-broker/message-broker.interface';
-
-describe('Create User Usecase', () => {
-    let userDataSource: IUserDataSource
-    let exceptionService: IExceptionService
-    let messageBroker: IMessageBrokerService
+import { ExceptionsService } from '@app/common/exceptions/exceptions.service';
+describe('User Controller', () => {
+    let app: INestApplication;
     let createUserUsecase: CreateUserUsecase
+
+    let userDataSource: IUserDataSource
+    let messageBroker: IMessageBrokerService
     const userDto = {
-        email: 'a@fg7a.com',
+        email: 'a@a.com',
         first_name: 'ali',
         last_name: 'alavi',
         password: '123',
         avatar: 'av'
     }
-    beforeEach(async () => {
-
+    beforeAll(async () => {
         userDataSource = {
-            insert: jest.fn().mockImplementation(() => userDto),
-            findByEmail: jest.fn().mockImplementation(() => false)
+            findByEmail: jest.fn(() => Promise.resolve(null)),
+            insert: jest.fn(() => Promise.resolve(userDto))
         }
+        messageBroker = {} as IMessageBrokerService
+        messageBroker.emitUserCreatedEvent = jest.fn().mockResolvedValue(() => null)
 
-        exceptionService = {
-            badRequestException: jest.fn().mockImplementation(() => { throw new BadRequestException('////////'); }),
-            conflictException: jest.fn().mockImplementation(() => true)
-        } as unknown as IExceptionService
+        const moduleRef: TestingModule = await Test.createTestingModule({
+            providers: [
+                {
+                    provide: UsecaseProxyModule.POST_USER_USECASES_PROXY,
+                    useValue: new CreateUserUsecase(userDataSource, new ExceptionsService(), messageBroker)
+                }
+            ]
+        }).compile()
 
-        messageBroker = {
-            emitUserCreatedEvent: jest.fn().mockImplementation(() => true)
-        } as unknown as IMessageBrokerService
+        app = moduleRef.createNestApplication();
+        await app.init();
 
-        createUserUsecase = new CreateUserUsecase(userDataSource, exceptionService, messageBroker)
+        createUserUsecase = moduleRef.get<CreateUserUsecase>(UsecaseProxyModule.POST_USER_USECASES_PROXY)
     });
-
-    describe('should create user', () => {
-
-        it('should create user', async () => {
-            expect(await createUserUsecase.createUser(userDto)).toEqual(userDto);
-        });
-    })
-
-    describe('call services', () => {
-
-        it('call three services', async () => {
-            await createUserUsecase.createUser(userDto)
-            expect(userDataSource.findByEmail).toHaveBeenCalled()
-            expect(userDataSource.insert).toHaveBeenCalled()
-            expect(messageBroker.emitUserCreatedEvent).toHaveBeenCalled()
-        });
-    })
-
-
+    it('should be defined', async () => {
+        expect(createUserUsecase.createUser).toBeDefined
+    });
+    it('return created user', async () => {
+        const res = await createUserUsecase.createUser(userDto)
+        expect(res).toEqual(userDto)
+        expect(userDataSource.findByEmail).toHaveBeenCalled()
+        expect(userDataSource.insert).toHaveBeenCalled()
+        expect(messageBroker.emitUserCreatedEvent).toHaveBeenCalled()
+    });
+    it('return error', async () => {
+        jest.spyOn(userDataSource, 'findByEmail').mockImplementation(() => Promise.resolve(userDto))
+        expect(createUserUsecase.createUser(userDto)).rejects.toThrow(ConflictException)
+    });
+    afterAll(async () => {
+        await app.close();
+    });
 });
