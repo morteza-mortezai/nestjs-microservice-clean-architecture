@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
   ConflictException
 } from '@nestjs/common';
-import { IExceptionService, IFormatExceptionMessage, IFormatCommonExceptionMessage } from '../../../../apps/users/src/domain/exceptions/exception-service.interface';
+import { IExceptionService, IFormatExceptionMessage, IFormatCommonExceptionMessage } from '../../domain/exceptions/exception-service.interface';
 
 @Injectable()
 export class ExceptionsService implements IExceptionService {
