@@ -1,5 +1,4 @@
-import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete } from '@nestjs/common';
-import { Payload } from '@nestjs/microservices'
+import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete, Body } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
 import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
@@ -24,7 +23,7 @@ export class UserController {
     ) { }
     // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
     @Post('users')
-    async createUser(@Payload() createUser: CreateUserDto) {
+    async createUser(@Body() createUser: CreateUserDto) {
         // try {
         const createdUser = await this.postUserUsecase.getInstance().createUser(createUser as any)
         return createdUser
