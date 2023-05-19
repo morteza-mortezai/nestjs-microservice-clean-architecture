@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
-import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
+import { RabbitmqModule } from '../rabbit-mq/rabbit-mq.module';
 
 @Module({
-    imports: [
-        UsecaseProxyModule.register()
-    ],
+    imports: [RabbitmqModule],
     controllers: [
         UserController
     ],

@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { RMQ_SERVICES } from '@app/common/constants/rmq.constant';
 import { ClientProxyFactory } from '@nestjs/microservices';
 import { EnvironmentService } from '../environment/environment.service';
+import { EnvironmentModule } from '../environment/environment.module';
 
 @Module({
-
+    imports: [EnvironmentModule],
     controllers: [],
     providers: [
         {
