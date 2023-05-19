@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsecaseProxyModule } from '../infrastructure/usecase-proxy/usecase-proxy.module';
 import { INestApplication } from '@nestjs/common';
-import { ExceptionsService } from '@app/common/exceptions/exceptions.service';
+import { ExceptionsService } from '../infrastructure/exceptions/exceptions.service';
 import { IAvatarDataSource } from '../domain/data-source/avatar-data-source.interface';
 import { IExternallApiService } from '../domain/external-api/externall-api.interface';
 import { IDiskStorageAvatar } from '../domain/disk-storage-avatar/disk-storage-avatar.interface';
