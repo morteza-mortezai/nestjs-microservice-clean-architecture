@@ -14,7 +14,7 @@ async function bootstrap() {
   app.setGlobalPrefix(GLOBAL_API_PREFIX)
   const environmentService = app.get<EnvironmentService>(EnvironmentService)
 
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  // app.useGlobalFilters(new GlobalExceptionFilter());
   app.useGlobalFilters(new MicroserviceExceptionFilter());
 
   app.connectMicroservice(environmentService.getRabbitMQOptions(RMQ_SERVICES.USERS));

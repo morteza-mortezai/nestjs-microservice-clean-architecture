@@ -1,4 +1,4 @@
-import { RMQ_MESSAGES } from '@app/common/constants/rmq.constant';
+import { RMQ_EVENTS } from '@app/common/constants/rmq.constant';
 import { Controller, Inject } from '@nestjs/common';
 import { EventPattern, Payload, Ctx, RmqContext } from '@nestjs/microservices'
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
@@ -13,7 +13,7 @@ export class MailerController {
     private readonly confirmMailUsecase: UsecaseProxy<ConfirmMailUsecase>,
     // private readonly disk: DiskStoreService,
   ) { }
-  @EventPattern(RMQ_MESSAGES.NEW_USER_CREATED) // TODO : print user
+  @EventPattern(RMQ_EVENTS.NEW_USER_CREATED) // TODO : print user
   async sendConfirmationMail(@Payload() newUser: UserM, @Ctx() context: RmqContext) {
     const result = await this.confirmMailUsecase.getInstance().sendEmail(newUser)
     const channel = context.getChannelRef();

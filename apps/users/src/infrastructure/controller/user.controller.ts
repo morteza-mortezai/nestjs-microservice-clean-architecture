@@ -1,5 +1,5 @@
-import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete } from '@nestjs/common';
-import { Payload, MessagePattern } from '@nestjs/microservices'
+import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete, BadRequestException } from '@nestjs/common';
+import { Payload, MessagePattern, RpcException, RmqContext, Ctx } from '@nestjs/microservices'
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
 import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
@@ -7,7 +7,7 @@ import { CreateUserUsecase } from '../../usecase/create-user.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/get-user-from-api.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/get-user-avatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
-import { RMQ_MESSAGES } from '@app/common/constants/rmq.constant';
+import { RMQ_CMD, RMQ_EVENTS } from '@app/common/constants/rmq.constant';
 import { UserM } from '../../domain/model/user';
 
 
@@ -24,8 +24,12 @@ export class UserController {
         private readonly deleteAvatarUsecase: UsecaseProxy<DeleteAvatarUsecase>,
 
     ) { }
-    @MessagePattern(RMQ_MESSAGES.CREATE_NEW_USER)
-    async createUser(@Payload() createUser: UserM) {
+    @MessagePattern(RMQ_CMD.CREATE_NEW_USER)
+    async createUser(@Payload() createUser: UserM, @Ctx() context: RmqContext) {
+        const channel = context.getChannelRef();
+        const originalMsg = context.getMessage();
+        channel.ack(originalMsg);
+        // throw new RpcException('hi this is error')
         const createdUser = await this.postUserUsecase.getInstance().createUser(createUser)
         return createdUser
     }

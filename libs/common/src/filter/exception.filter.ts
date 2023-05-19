@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { QueryFailedError, EntityNotFoundError, CannotCreateEntityIdMapError, TypeORMError } from 'typeorm';
 import { MongoBulkWriteError, MongoError } from 'mongodb'
 import { AxiosError } from 'axios'
-// import { GlobalResponseError } from './global.response.error';
+import { IResponseError } from '../interface/error-response.interface';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -39,6 +39,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       message = (exception as AxiosError)?.message;
       code = (exception as AxiosError)?.code;
     }
+    else if ((ec as any).message && (ec as any).status) {
+      status = (exception as any)?.status
+      message = (exception as any)?.message;
+      code = (exception as any)?.status;
+    }
     else {
       status = HttpStatus.INTERNAL_SERVER_ERROR
     }
@@ -66,11 +71,3 @@ export const globalResponseError: (statusCode: number, message: string, code: st
 };
 
 
-export interface IResponseError {
-  statusCode: number;
-  message: string;
-  code: string;
-  timestamp: string;
-  path: string;
-  method: string;
-}

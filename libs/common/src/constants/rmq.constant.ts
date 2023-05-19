@@ -2,7 +2,10 @@ export enum RMQ_SERVICES {
     MAILER = 'MAILER',
     USERS = 'USERS',
 }
-export enum RMQ_MESSAGES {
+export enum RMQ_EVENTS {
     NEW_USER_CREATED = 'NEW_USER_CREATED',
-    CREATE_NEW_USER = 'CREATE_NEW_USER'
-} 
+}
+
+export const RMQ_CMD = {
+    CREATE_NEW_USER: { cmd: 'CREATE_NEW_USER' }
+}
