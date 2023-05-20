@@ -7,8 +7,9 @@ import { CreateUserUsecase } from '../../usecase/create-user.usecase'
 import { GetUserFromApiUsecase } from '../../usecase/get-user-from-api.usecase'
 import { GetUserAvatarUsecase } from '../../usecase/get-user-avatar.usecase'
 import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
-import { RMQ_CMD, RMQ_EVENTS } from '@app/common/constants/rmq.constant';
+import { RMQ_CMD } from '@app/common/constants/rmq.constant';
 import { UserM } from '../../domain/model/user';
+import { RabbitmqService } from '../config/rabbit-mq/rabbit-mq.service';
 
 
 @Controller()
@@ -22,30 +23,20 @@ export class UserController {
         private readonly getAvatarUsecaseProxy: UsecaseProxy<GetUserAvatarUsecase>,
         @Inject(UsecaseProxyModule.Delete_USER_AVATAR_USECASES_PROXY)
         private readonly deleteAvatarUsecase: UsecaseProxy<DeleteAvatarUsecase>,
-
+        private readonly rabbitmqService: RabbitmqService,
     ) { }
     @MessagePattern(RMQ_CMD.CREATE_NEW_USER)
     async createUser(@Payload() createUser: UserM, @Ctx() context: RmqContext) {
-        const channel = context.getChannelRef();
-        const originalMsg = context.getMessage();
-        channel.ack(originalMsg);
-        // throw new RpcException('hi this is error')
         const createdUser = await this.postUserUsecase.getInstance().createUser(createUser)
+        this.rabbitmqService.ack(context)
         return createdUser
     }
 
-    @Get('user/:userId')
-    // async createUser(@Payload() userId: number, @Ctx() context: RmqContext) {
-    async getUserById(@Param('userId', ParseIntPipe) userId: number) {
-        // return 'hello000'
-        // try {
+    @MessagePattern(RMQ_CMD.GET_USER_BY_ID)
+    async getUserById(@Payload() userId: number, @Ctx() context: RmqContext) {
         const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(userId)
+        this.rabbitmqService.ack(context)
         return user
-
-        // } catch (error) {
-        // console.log('ee', error)
-        // throw error
-        // }
     }
 
     @Get('user/:userId/avatar')
