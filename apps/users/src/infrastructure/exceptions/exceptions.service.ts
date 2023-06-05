@@ -4,7 +4,6 @@ import {
   HttpException,
   Injectable,
   InternalServerErrorException,
-  UnauthorizedException,
   ConflictException
 } from '@nestjs/common';
 import { IExceptionService, IFormatExceptionMessage, IFormatCommonExceptionMessage } from '../../domain/exceptions/exception-service.interface';

@@ -1,10 +1,9 @@
 
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, BadRequestException, HttpStatus, Logger } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { QueryFailedError, EntityNotFoundError, CannotCreateEntityIdMapError, TypeORMError } from 'typeorm';
-import { MongoBulkWriteError, MongoError } from 'mongodb'
+import { TypeORMError } from 'typeorm';
+import { MongoError } from 'mongodb'
 import { AxiosError } from 'axios'
-// import { GlobalResponseError } from './global.response.error';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -38,9 +37,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       status = (exception as AxiosError)?.response?.status || (exception as AxiosError)?.status || 500
       message = (exception as AxiosError)?.message;
       code = (exception as AxiosError)?.code;
-    }
-    else {
-      status = HttpStatus.INTERNAL_SERVER_ERROR
     }
 
     response.status(status).json(globalResponseError(status, message, code, request));

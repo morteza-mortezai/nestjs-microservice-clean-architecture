@@ -4,7 +4,7 @@ import { CreateUserUsecase } from '../usecase/create-user.usecase';
 import { ConflictException, INestApplication } from '@nestjs/common';
 import { IUserDataSource } from '../domain/data-source/user-data-source.interface';
 import { IMessageBrokerService } from '../domain/message-broker/message-broker.interface';
-import { ExceptionsService } from '@app/common/exceptions/exceptions.service';
+import { ExceptionsService } from '../infrastructure/exceptions/exceptions.service';
 describe('User Controller', () => {
     let app: INestApplication;
     let createUserUsecase: CreateUserUsecase

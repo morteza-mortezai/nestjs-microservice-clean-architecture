@@ -21,30 +21,20 @@ export class UserController {
         private readonly deleteAvatarUsecase: UsecaseProxy<DeleteAvatarUsecase>,
 
     ) { }
-    // @MessagePattern(RMQ_MESSAGES.GET_USER_BY_ID)
+
     @Post('users')
     async createUser(@Body() createUser: CreateUserDto) {
-        // try {
         const createdUser = await this.postUserUsecase.getInstance().createUser(createUser as any)
         return createdUser
     }
 
     @Get('user/:userId')
-    // async createUser(@Payload() userId: number, @Ctx() context: RmqContext) {
     async getUserById(@Param('userId', ParseIntPipe) userId: number) {
-        // return 'hello000'
-        // try {
         const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(userId)
         return user
-
-        // } catch (error) {
-        // console.log('ee', error)
-        // throw error
-        // }
     }
 
     @Get('user/:userId/avatar')
-    // async createUser(@Payload() userId: number, @Ctx() context: RmqContext) {
     async getAvatarByUserId(@Param('userId', ParseIntPipe) userId: number) {
         const user = await this.getAvatarUsecaseProxy.getInstance().getAvatar(userId)
         return user

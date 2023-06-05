@@ -10,7 +10,6 @@ export class Avatar {
         unique: true,
         primary: true
     })
-    // TODO : convert to kebab
     userId: number;
 
     @Column({
