@@ -17,6 +17,7 @@ they communicate each other throug rabbitMq .
 
 client request is recived by gateway and after validation, it is sent to related microservice and then result will be sent back .
 
+![1](https://github.com/morteza-mortezai/nestjs-microservice-clean-architecture/assets/75200938/875f23fb-8fef-4e1f-9a5d-546b3af29673)
 ## architecture
 clean architecture is used for this project 
 
@@ -28,8 +29,7 @@ and also usecase layer can just depend on domain layer
 
 Infrastructure layer is where controller and other services are there .
 
-
-![1](https://github.com/morteza-mortezai/nestjs-microservice-clean-architecture/assets/75200938/875f23fb-8fef-4e1f-9a5d-546b3af29673)
+[clean architecture](https://www.mytaskpanel.com/wp-content/uploads/2022/09/blog-consulting18b.jp)g
 
 ## Installation
 
