@@ -29,7 +29,7 @@ and also usecase layer can just depend on domain layer
 
 Infrastructure layer is where controller and other services are there .
 
-[clean architecture](https://www.mytaskpanel.com/wp-content/uploads/2022/09/blog-consulting18b.jp)g
+[clean architecture](https://www.mytaskpanel.com/wp-content/uploads/2022/09/blog-consulting18b.jpg)
 
 ## Installation
 
