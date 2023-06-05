@@ -15,6 +15,8 @@ this project is consist of three microservices ,*Gateway* ,*Users* and *Mailer*
 
 they communicate each other throug rabbitMq .
 
+there is also **lib** folder that contains common modules .
+
 client request is recived by gateway and after validation, it is sent to related microservice and then result will be sent back .
 
 ![1](https://github.com/morteza-mortezai/nestjs-microservice-clean-architecture/assets/75200938/875f23fb-8fef-4e1f-9a5d-546b3af29673)
@@ -22,6 +24,7 @@ client request is recived by gateway and after validation, it is sent to related
 clean architecture is used for this project 
 
 it is consist of three main layer ; **Domain** , **Usecase** and **Infrastucture** .
+
 
 accroding to clean architecture rules domain layer should not depend on any thing .
 
