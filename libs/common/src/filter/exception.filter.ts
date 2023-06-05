@@ -1,8 +1,8 @@
 
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, BadRequestException, HttpStatus, Logger } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { QueryFailedError, EntityNotFoundError, CannotCreateEntityIdMapError, TypeORMError } from 'typeorm';
-import { MongoBulkWriteError, MongoError } from 'mongodb'
+import { TypeORMError } from 'typeorm';
+import { MongoError } from 'mongodb'
 import { AxiosError } from 'axios'
 import { IResponseError } from '../interface/error-response.interface';
 
@@ -14,11 +14,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     let message = (exception as any)?.message;
-    let code: string = 'Exception';
-    let status: number = HttpStatus.INTERNAL_SERVER_ERROR;
+    let code: string = (exception as any)?.response?.error || 'Exception';
+    let status: number = (exception as any)?.response?.statusCode || HttpStatus.INTERNAL_SERVER_ERROR;
 
     const ec = exception
-
     if (ec instanceof HttpException) {
       status = (exception as HttpException).getStatus();
       message = (exception as any).getResponse()?.message ? (exception as any)?.getResponse().message : (exception as any).getResponse()
@@ -39,15 +38,6 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       message = (exception as AxiosError)?.message;
       code = (exception as AxiosError)?.code;
     }
-    else if ((ec as any).message && (ec as any).status) {
-      status = (exception as any)?.status
-      message = (exception as any)?.message;
-      code = (exception as any)?.status;
-    }
-    else {
-      status = HttpStatus.INTERNAL_SERVER_ERROR
-    }
-
     response.status(status).json(globalResponseError(status, message, code, request));
   }
 }

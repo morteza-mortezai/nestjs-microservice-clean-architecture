@@ -1,4 +1,3 @@
-import { IAppMailer } from "../domain/app-mailer/app-mailer.abstract";
 import { IExceptionService } from "../domain/exceptions/exception-service.interface";
 import { IMessageBrokerService } from "../domain/message-broker/message-broker.interface";
 import { UserM } from "../domain/model/user";
@@ -12,10 +11,9 @@ export class CreateUserUsecase {
 
     ) { }
     // it would be better to use transactions here .
-    // unfortunately TYPEORM/MongoDB doesn't support it yet. 
     async createUser(newUser: UserM) {
         const exist = await this.userDataSource.findByEmail(newUser.email)
-        if (exist) throw this.exceptionService.conflictException({ message: 'Email Already Token' })
+        if (exist) throw this.exceptionService.badRequestException({ message: 'Email Already Token' })
         const createdUser = await this.userDataSource.insert(newUser)
         this.messageBroker.emitUserCreatedEvent(createdUser)
         return createdUser

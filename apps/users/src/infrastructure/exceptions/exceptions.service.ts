@@ -1,22 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+  ConflictException
+} from '@nestjs/common';
 import { IExceptionService, IFormatExceptionMessage, IFormatCommonExceptionMessage } from '../../domain/exceptions/exception-service.interface';
-import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class ExceptionsService implements IExceptionService {
   requestException(data: IFormatCommonExceptionMessage): void {
-    throw new RpcException({ message: data.message, status: data.code_error })
+    throw new HttpException(data.message, data.code_error);
   }
   badRequestException({ message }: IFormatExceptionMessage): void {
-    throw new RpcException({ message, status: 400 })
+    throw new BadRequestException(message);
   }
   internalServerErrorException({ message }: IFormatExceptionMessage): void {
-    throw new RpcException({ message, status: 500 })
+    throw new InternalServerErrorException(message);
   }
   forbiddenException({ message }: IFormatExceptionMessage): void {
-    throw new RpcException({ message, status: 403 })
+    throw new ForbiddenException(message);
   }
   conflictException({ message }: IFormatExceptionMessage): void {
-    throw new RpcException({ message, status: 409 })
+    throw new ConflictException(message);
   }
 }

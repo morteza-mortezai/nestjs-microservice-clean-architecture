@@ -40,14 +40,14 @@ export class UserController {
         return user
     }
 
-    @Get('user/:userId/avatar')
-    async getAvatarByUserId(@Param('userId', ParseIntPipe) userId: number) {
+    @MessagePattern(RMQ_CMD.GET_AVATAR_BY_ID)
+    async getAvatarByUserId(@Payload() userId: number) {
         const user = await this.getAvatarUsecaseProxy.getInstance().getAvatar(userId)
         return user
     }
 
-    @Delete('user/:userId/avatar')
-    async deleteAvatar(@Param('userId', ParseIntPipe) userId: number) {
+    @MessagePattern(RMQ_CMD.DELETE_AVATAR_BY_ID)
+    async deleteAvatar(@Payload() userId: number) {
         return this.deleteAvatarUsecase.getInstance().deleteAvatar(userId)
     }
 
