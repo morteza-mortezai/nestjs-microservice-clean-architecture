@@ -34,6 +34,12 @@ Infrastructure layer is where controller and other services are there .
 
 ![2](https://github.com/morteza-mortezai/nestjs-microservice-clean-architecture/assets/75200938/0c7e56de-9aab-4d77-b15d-821befc1f6d6)
 
+## endpoints
+post: localhost:3001/api/users
+get: localhost:3001/api/user/:id
+get : localhost:3000/api/user/:id/avatar
+delete : localhost:3000/api/user/:id/avatar
+
 ## Installation
 
 ```bash
