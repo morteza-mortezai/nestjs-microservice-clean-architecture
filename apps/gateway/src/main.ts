@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { EnvironmentService } from './infrastructure/environment/environment.service'
 import { GLOBAL_API_PREFIX } from './infrastructure/constants/app.constant'
-import { MicroserviceExceptionFilter } from '@app/common/filter/rpc-exception.filter';
 import { GlobalExceptionFilter } from '@app/common/filter/exception.filter';
 
 async function bootstrap() {
@@ -11,7 +10,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix(GLOBAL_API_PREFIX)
   const environmentService = app.get(EnvironmentService);
-  // app.useGlobalFilters(new MicroserviceExceptionFilter());
   app.useGlobalFilters(new GlobalExceptionFilter());
   await app.listen(environmentService.getAppPort());
 }

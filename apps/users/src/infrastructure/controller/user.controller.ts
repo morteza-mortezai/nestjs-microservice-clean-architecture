@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete, UseFilters } from '@nestjs/common';
 import { Payload, MessagePattern, RpcException, RmqContext, Ctx } from '@nestjs/microservices'
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
@@ -10,9 +10,12 @@ import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
 import { RMQ_CMD } from '@app/common/constants/rmq.constant';
 import { UserM } from '../../domain/model/user';
 import { RabbitmqService } from '../config/rabbit-mq/rabbit-mq.service';
+import { GlobalExceptionFilter2 } from '@app/common/filter/exception2.filter';
 
 
 @Controller()
+
+@UseFilters(GlobalExceptionFilter2)
 export class UserController {
     constructor(
         @Inject(UsecaseProxyModule.POST_USER_USECASES_PROXY)
@@ -31,7 +34,6 @@ export class UserController {
         this.rabbitmqService.ack(context)
         return createdUser
     }
-
     @MessagePattern(RMQ_CMD.GET_USER_BY_ID)
     async getUserById(@Payload() userId: number, @Ctx() context: RmqContext) {
         const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(userId)
