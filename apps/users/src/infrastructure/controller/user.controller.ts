@@ -10,12 +10,12 @@ import { DeleteAvatarUsecase } from '../../usecase/delete-avatar.usecase'
 import { RMQ_CMD } from '@app/common/constants/rmq.constant';
 import { UserM } from '../../domain/model/user';
 import { RabbitmqService } from '../config/rabbit-mq/rabbit-mq.service';
-import { GlobalExceptionFilter2 } from '@app/common/filter/exception2.filter';
+import { RPCExceptionFilter } from '@app/common/filter/rpc-exception.filter';
 
 
 @Controller()
 
-@UseFilters(GlobalExceptionFilter2)
+@UseFilters(RPCExceptionFilter)
 export class UserController {
     constructor(
         @Inject(UsecaseProxyModule.POST_USER_USECASES_PROXY)
