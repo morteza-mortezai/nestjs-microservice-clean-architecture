@@ -16,7 +16,8 @@ they communicate each other throw rabbitMq .
 client request is recived by gateway and after validation, it is send to related microservice and then result will be sent back .
 
 
-![My Image](./document/1.png)
+![1](https://github.com/morteza-mortezai/nestjs-microservice-clean-architecture/assets/75200938/875f23fb-8fef-4e1f-9a5d-546b3af29673)
+
 ## Installation
 
 ```bash
