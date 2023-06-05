@@ -22,18 +22,15 @@ $ npm install
 ## Running the app
 
 ```bash
-# development
 $ npm run start gateway
+```
 then in new terminal
+```bash
 $ npm run start users
+```
 then in new terminal
+```bash
 $ npm run start mailer
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
 ## Test
