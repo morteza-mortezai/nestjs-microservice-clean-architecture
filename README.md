@@ -15,7 +15,7 @@ this project is consist of three microservices ,*Gateway* ,*Users* and *Mailer* 
 they communicate each other throw rabbitMq .
 client request is recived by gateway and after validation, it is send to related microservice and then result will be sent back .
 
-<img src="@/document/1.png" width="200" alt="Nest Logo" />
+<img src="../../document/1.png" width="200" alt="Nest Logo" />
 ## Installation
 
 ```bash
