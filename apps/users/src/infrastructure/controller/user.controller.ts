@@ -1,6 +1,5 @@
-import { Controller, Post, Get, Inject, ParseIntPipe, Param, Delete, UseFilters } from '@nestjs/common';
-import { Payload, MessagePattern, RpcException, RmqContext, Ctx } from '@nestjs/microservices'
-import { CreateUserDto } from '../dto/create-user.dto';
+import { Controller, Get, Inject, ParseIntPipe, Param, Delete, UseFilters } from '@nestjs/common';
+import { Payload, MessagePattern, RmqContext, Ctx } from '@nestjs/microservices'
 import { UsecaseProxyModule } from '../usecase-proxy/usecase-proxy.module';
 import { UsecaseProxy } from '../usecase-proxy/usecase-proxy'
 import { CreateUserUsecase } from '../../usecase/create-user.usecase'

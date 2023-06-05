@@ -5,7 +5,7 @@ import { UsecaseProxyModule } from './infrastructure/usecase-proxy/usecase-proxy
 
 
 @Module({
-  imports: [EnvironmentModule, UsecaseProxyModule.register()],
+  imports: [EnvironmentModule, UsecaseProxyModule.register(),],
   controllers: [MailerController],
   providers: [],
 })
