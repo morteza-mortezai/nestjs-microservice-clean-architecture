@@ -36,13 +36,12 @@ export class UserController {
     }
     @MessagePattern(RMQ_CMD.GET_USER_BY_ID)
     async getUserById(@Payload() userId: number, @Ctx() context: RmqContext) {
-        const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(userId)
         this.rabbitmqService.ack(context)
+        const user = await this.getUserUsecaseProxy.getInstance().getUserFromApi(userId)
         return user
     }
 
     @Get('user/:userId/avatar')
-    // async createUser(@Payload() userId: number, @Ctx() context: RmqContext) {
     async getAvatarByUserId(@Param('userId', ParseIntPipe) userId: number) {
         const user = await this.getAvatarUsecaseProxy.getInstance().getAvatar(userId)
         return user

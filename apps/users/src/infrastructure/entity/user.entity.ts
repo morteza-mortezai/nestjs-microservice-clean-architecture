@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryColumn, ObjectIdColumn, ObjectId } from 'typeorm';
-
+import { Column, Entity, ObjectIdColumn, ObjectId } from 'typeorm';
+import { IsEmail } from "class-validator"
 @Entity()
 export class User {
 
@@ -21,8 +21,8 @@ export class User {
     @Column({
         unique: true,
         nullable: false,
-        // name: 'email_add'
     })
+    @IsEmail()
     email: string;
 
     @Column({
