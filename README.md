@@ -41,8 +41,11 @@ Infrastructure layer is where controller and other services are there .
 
 ## endpoints
 post: localhost:3001/api/users
+
 get: localhost:3001/api/user/:id
+
 get : localhost:3000/api/user/:id/avatar
+
 delete : localhost:3000/api/user/:id/avatar
 
 ## Installation
