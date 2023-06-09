@@ -1,54 +1,33 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Column, Entity, ObjectIdColumn, ObjectId } from 'typeorm';
+import { IsEmail } from "class-validator"
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn({
-        type: 'bigint',
-        name: 'user_id',
-    })
-    id: number;
+
+    @ObjectIdColumn()
+    _id: ObjectId
 
     @Column({
         nullable: false,
         default: '',
     })
-    username: string;
+    first_name: string;
 
     @Column({
-        name: 'email_address',
         nullable: false,
         default: '',
     })
+    last_name: string;
+
+    @Column({
+        unique: true,
+        nullable: false,
+    })
+    @IsEmail()
     email: string;
 
     @Column({
         nullable: false,
         default: '',
     })
-    password: string;
+    avatar: string;
 }
-
-// import { EntitySchema } from 'typeorm';
-// import { UserM } from 'src/domain/model/user';
-
-// export const User = new EntitySchema<UserM>({
-//     name: 'UserM',
-//     target: UserM,
-//     columns: {
-//         id: {
-//             type: Number,
-//             primary: true,
-//             generated: true,
-//         },
-//         username: {
-//             type: String,
-//         },
-//         email: {
-//             type: String,
-//         },
-//         password: {
-//             type: Boolean,
-//             default: true,
-//         },
-//     },
-// });

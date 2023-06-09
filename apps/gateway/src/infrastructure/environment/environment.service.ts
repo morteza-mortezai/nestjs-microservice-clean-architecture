@@ -6,7 +6,9 @@ import { ClientOptions, Transport } from '@nestjs/microservices';
 
 @Injectable()
 export class EnvironmentService implements RmqConfig, AppConfig {
-    constructor(private configService: ConfigService) { }
+    constructor(
+        private configService: ConfigService
+    ) { }
 
     getAppPort(): number {
         return this.configService.get<number>('APP_PORT');

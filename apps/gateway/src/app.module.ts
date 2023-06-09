@@ -1,14 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ControllersModule } from './infrastructure/controllers/controllers.module';
-import { ServicesModule } from './infrastructure/services/services.module';
 import { EnvironmentModule } from './infrastructure/environment/environment.module';
-import { ConfigModule } from '@nestjs/config';
+import { ControllerModule } from './infrastructure/controllers/controller.module';
+
 
 @Module({
-    imports: [ControllersModule, ServicesModule,
-
-
-    ],
+    imports: [EnvironmentModule, ControllerModule],
     controllers: [],
     providers: [],
 })

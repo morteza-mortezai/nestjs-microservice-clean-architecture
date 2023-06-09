@@ -1,7 +1,0 @@
-export enum RMQ_SERVICES {
-    USERS = 'USERS',
-}
-export enum RMQ_MESSAGES {
-    CREATE_NEW_USER = 'CREATE_NEW_USER',
-    GET_USER_BY_ID = 'GET_USER_BY_ID'
-} 
